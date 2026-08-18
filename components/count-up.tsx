@@ -1,12 +1,12 @@
 "use client";
 
-import { animate } from "animejs";
-import { useEffect, useRef } from "react";
+import { animate, useInView, useMotionValue } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   /** Final numeric target. */
   to: number;
-  /** Text to append after the number, e.g. "+", "M", " sq. ft." */
+  /** Text to append after the number, e.g. "+", " sq. ft." */
   suffix?: string;
   /** Format 1200000 -> "1.2M". If false, uses toLocaleString(). */
   compact?: boolean;
@@ -26,9 +26,10 @@ function fmt(n: number, compact?: boolean) {
 }
 
 /**
- * Counts from 0 -> `to` when scrolled into view. Runs once. Honors
- * prefers-reduced-motion by skipping the animation and showing the final
- * value immediately.
+ * Counts from 0 -> `to` when scrolled into view. Runs once. Uses motion's
+ * useInView + useMotionValue -- no manual IntersectionObserver, no manual
+ * requestAnimationFrame loop. Reduced-motion users see the final value
+ * immediately (skip the count animation).
  */
 export function CountUp({
   to,
@@ -38,50 +39,33 @@ export function CountUp({
   className,
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const value = useMotionValue(0);
+  const [display, setDisplay] = useState(() => `${fmt(to, compact)}${suffix}`);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!inView) return;
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      el.textContent = `${fmt(to, compact)}${suffix}`;
+      setDisplay(`${fmt(to, compact)}${suffix}`);
       return;
     }
+    value.set(0);
+    setDisplay(`${fmt(0, compact)}${suffix}`);
+    const controls = animate(value, to, {
+      duration: duration / 1000,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setDisplay(`${fmt(v, compact)}${suffix}`),
+      onComplete: () => setDisplay(`${fmt(to, compact)}${suffix}`),
+    });
+    return () => controls.stop();
+  }, [inView, to, suffix, compact, duration, value]);
 
-    // Start visibly at 0 so the frame before observe doesn't flash the target.
-    el.textContent = `${fmt(0, compact)}${suffix}`;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const state = { v: 0 };
-          animate(state, {
-            v: to,
-            duration,
-            ease: "outExpo",
-            onUpdate: () => {
-              el.textContent = `${fmt(state.v, compact)}${suffix}`;
-            },
-            onComplete: () => {
-              el.textContent = `${fmt(to, compact)}${suffix}`;
-            },
-          });
-          io.unobserve(el);
-        }
-      },
-      { threshold: 0.5 },
-    );
-    io.observe(el);
-
-    return () => io.disconnect();
-  }, [to, suffix, compact, duration]);
-
-  // Rendered fallback for SSR / no-JS: the final value.
   return (
     <span ref={ref} className={className}>
-      {`${fmt(to, compact)}${suffix}`}
+      {display}
     </span>
   );
 }

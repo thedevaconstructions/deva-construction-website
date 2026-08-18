@@ -1,7 +1,6 @@
 "use client";
 
-import { animate } from "animejs";
-import { useEffect, useRef } from "react";
+import { motion, type HTMLMotionProps } from "motion/react";
 
 type Props = {
   children: React.ReactNode;
@@ -15,14 +14,14 @@ type Props = {
   threshold?: number;
   /** Optional className passthrough. */
   className?: string;
-  /** Render as a different tag (default: div). */
-  as?: keyof React.JSX.IntrinsicElements;
+  /** Render as a different motion element (default: div). */
+  as?: "div" | "section" | "article" | "header" | "p" | "span";
 };
 
 /**
- * Fade + rise on first scroll into view. Honors prefers-reduced-motion —
- * users who have it set see the content immediately with no motion at all.
- * Renders visibly on the server so no-JS visitors get the full content too.
+ * Fade + rise on first scroll into view. Motion's whileInView + viewport.once
+ * handles the IntersectionObserver dance for us, and prefers-reduced-motion
+ * is respected automatically -- reduced-motion users get no motion at all.
  */
 export function Reveal({
   children,
@@ -31,47 +30,24 @@ export function Reveal({
   duration = 700,
   threshold = 0.15,
   className,
-  as: Tag = "div",
+  as = "div",
 }: Props) {
-  const ref = useRef<HTMLElement>(null);
+  const MotionTag = motion[as] as React.ComponentType<HTMLMotionProps<"div">>;
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
-
-    // Hide before observing so the initial paint doesn't show it.
-    el.style.opacity = "0";
-    el.style.transform = `translateY(${y}px)`;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          animate(el, {
-            opacity: [0, 1],
-            translateY: [y, 0],
-            duration,
-            delay,
-            ease: "outExpo",
-          });
-          io.unobserve(el);
-        }
-      },
-      { threshold },
-    );
-    io.observe(el);
-
-    return () => io.disconnect();
-  }, [delay, y, duration, threshold]);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const Comp = Tag as any;
   return (
-    <Comp ref={ref} className={className}>
+    <MotionTag
+      className={className}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: threshold }}
+      transition={{
+        duration: duration / 1000,
+        delay: delay / 1000,
+        // Editorial-easing curve (outExpo-ish) tuned by hand.
+        ease: [0.16, 1, 0.3, 1],
+      }}
+    >
       {children}
-    </Comp>
+    </MotionTag>
   );
 }
