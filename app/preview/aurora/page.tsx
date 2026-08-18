@@ -18,7 +18,7 @@ export default function AuroraPreviewPage() {
 
       <section className="relative min-h-[100svh] overflow-hidden">
         {/* Aurora layer */}
-        <BgAurora className="-z-10" />
+        <BgAurora />
 
         <div className="mx-auto max-w-7xl px-6 pb-24 pt-6 lg:px-10 lg:pt-10">
           <Reveal duration={500} y={12}>

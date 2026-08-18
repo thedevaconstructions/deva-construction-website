@@ -17,14 +17,20 @@ export default function BoxesPreviewPage() {
       <PreviewChooser active="boxes" />
 
       <section className="relative min-h-[100svh] overflow-hidden">
-        {/* Background Boxes layer — non-interactive above content */}
+        {/* Background Boxes layer — visible and interactive on hover */}
         <div
           aria-hidden
-          className="pointer-events-auto absolute inset-0 -z-10 h-full w-full overflow-hidden bg-paper"
+          className="absolute inset-0 -z-10 h-full w-full overflow-hidden bg-paper"
         >
-          {/* Fade mask around edges */}
-          <div className="absolute inset-0 z-20 h-full w-full bg-paper [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
           <BgBoxes />
+          {/* Soft radial paper wash so the headline is legible where it lands */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse at 30% 40%, rgba(244,239,232,0.85) 0%, rgba(244,239,232,0.3) 40%, transparent 70%)",
+            }}
+          />
         </div>
 
         <div className="mx-auto max-w-7xl px-6 pb-24 pt-6 lg:px-10 lg:pt-10">
