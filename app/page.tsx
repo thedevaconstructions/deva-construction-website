@@ -31,11 +31,11 @@ export default function HomePage() {
           <h1 className="mt-8 font-serif text-[52px] leading-[0.98] tracking-tight text-ink md:text-[92px] lg:text-[120px]">
             <WordStagger
               segments={[
-                "Design",
-                <>
+                <span key="design">Design</span>,
+                <span key="built">
                   &amp; <span className="italic text-accent">Built</span>
-                </>,
-                "to elegance.",
+                </span>,
+                <span key="elegance">to elegance.</span>,
               ]}
               gap={140}
               delay={120}
