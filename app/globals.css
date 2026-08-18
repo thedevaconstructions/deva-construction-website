@@ -1,23 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  /* System-font stack — no network fetch, no build stall behind Google Fonts.
-     We can swap to Fraunces/Inter later via self-hosted @font-face when the
-     network is reliable. */
-  --font-serif: ui-serif, Georgia, "Times New Roman", Times, serif;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+  /* System-font stack — no network fetch. Swap to self-hosted Fraunces + Inter later. */
+  --font-serif: ui-serif, "Fraunces", "Playfair Display", Georgia, "Times New Roman", Times, serif;
+  --font-sans: ui-sans-serif, "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
 
-  /* Palette — warm cream paper, deep teal ink, coral accent. */
-  --color-paper: #F1EAE1;
-  --color-paper-2: #EFE7DC;
-  --color-bone: #E9E0D3;
-  --color-ink: #0E3B39;
-  --color-ink-2: #0A2E2D;
-  --color-brand: #0E3B39;
-  --color-accent: #D6845A;
-  --color-line: #D8CFC0;
+  /* Palette — "Blueprint & Cast Iron"
+     Warm bone paper, deep stone ink, safety-orange accent, burnished-bronze
+     luxury notes. Construction firm run like a design studio. */
+  --color-paper: #F4EFE8;
+  --color-paper-2: #EEE7DA;
+  --color-bone: #E7DECC;
+  --color-ink: #1C1917;
+  --color-ink-2: #0C0A09;
+  --color-steel: #3F3D3A;
+  --color-line: #D6CFC2;
   --color-muted: #6E6558;
+  --color-accent: #EA580C;
+  --color-bronze: #A16207;
+
+  /* Legacy tokens kept so any lingering class doesn't shatter — brand alias. */
+  --color-brand: #1C1917;
 }
 
 :root {
@@ -29,26 +34,30 @@ html {
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  /* Subtle blueprint grid — very low contrast; sits below all content. */
+  font-family: var(--font-sans);
   background-color: var(--color-paper);
+  /* Subtle blueprint grid — slightly bolder than before to read as "site plan". */
   background-image:
-    linear-gradient(to right, rgba(14, 59, 57, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(14, 59, 57, 0.045) 1px, transparent 1px);
-  background-size: 48px 48px;
+    linear-gradient(to right, rgba(28, 25, 23, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 25, 23, 0.055) 1px, transparent 1px);
+  background-size: 56px 56px;
   background-position: -1px -1px;
 }
 
-/* Editorial: serif faces with tighter tracking; italic used as an accent. */
 .font-serif {
-  font-family: var(--font-serif), Georgia, serif;
-  letter-spacing: -0.015em;
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
 }
 
-/* Little coral dot for section eyebrows / active-nav marker. */
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Coral dot for section eyebrows / active-nav marker. */
 .eyebrow-dot::before {
   content: "";
   display: inline-block;
@@ -58,4 +67,27 @@ body {
   background: var(--color-accent);
   margin-right: 10px;
   vertical-align: middle;
+}
+
+/* Custom cursor lives outside pointer events so it never blocks a click. */
+.cursor-magnet-target {
+  position: relative;
+}
+
+/* Utility: tabular figures for stat numbers so 40 vs 400 don't shift width. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Focus ring — high-contrast against warm paper + dark ink. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduce-motion is respected — global override for CSS animations. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }

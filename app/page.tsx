@@ -2,6 +2,10 @@ import Link from "next/link";
 import { WordStagger } from "@/components/word-stagger";
 import { CountUp } from "@/components/count-up";
 import { Reveal } from "@/components/reveal";
+import { Magnetic } from "@/components/magnetic";
+import { TiltCard } from "@/components/tilt-card";
+import { Marquee } from "@/components/marquee";
+import { HeroSceneMount as HeroScene } from "@/components/hero-scene-mount";
 
 const FEATURED_PROJECTS = [
   { slug: "narayanappa-residence", name: "Narayanappa Residence", location: "Ramgondahalli, Bangalore", year: "2026", kind: "Residential" },
@@ -16,12 +20,32 @@ const SERVICES = [
   { n: "04", title: "Project Management", body: "You have the drawings but not the labour? We take a signed set through procurement, site quality, and cash-flow — end to end." },
 ];
 
+const MARQUEE_ITEMS = [
+  "Residential",
+  "Commercial",
+  "Renovation",
+  "Interiors",
+  "Structural",
+  "Project management",
+  "Bangalore · Karnataka",
+];
+
 export default function HomePage() {
   return (
     <>
-      {/* HERO */}
+      {/* HERO — 3D scene behind editorial headline */}
       <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 pb-20 pt-8 lg:px-10 lg:pt-16">
+        {/* 3D scene layer — non-blocking, decorative */}
+        <div className="pointer-events-none absolute inset-0 -z-10 opacity-90">
+          <HeroScene className="absolute inset-0" />
+        </div>
+        {/* Soft fade at bottom so grid lines under the text stay legible */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-paper"
+        />
+
+        <div className="mx-auto max-w-7xl px-6 pb-24 pt-6 lg:px-10 lg:pt-10">
           <Reveal duration={500} y={12}>
             <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/70">
               Bangalore · Since 2018
@@ -52,21 +76,23 @@ export default function HomePage() {
 
             <Reveal delay={700} duration={800}>
               <div className="flex flex-wrap items-center justify-start gap-3 md:justify-end">
-                <Link
-                  href="/contact"
-                  className="group inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2"
-                >
-                  Start a project
-                  <span
-                    aria-hidden
-                    className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+                <Magnetic>
+                  <Link
+                    href="/contact"
+                    className="group inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2"
                   >
-                    →
-                  </span>
-                </Link>
+                    Start a project
+                    <span
+                      aria-hidden
+                      className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+                    >
+                      →
+                    </span>
+                  </Link>
+                </Magnetic>
                 <Link
                   href="/projects"
-                  className="inline-flex items-center rounded-full border border-ink/25 bg-paper/60 px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:bg-bone"
+                  className="inline-flex items-center rounded-full border border-ink/30 bg-paper/60 px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink backdrop-blur-sm transition hover:bg-bone"
                 >
                   See work
                 </Link>
@@ -77,12 +103,20 @@ export default function HomePage() {
           {/* Stats strip */}
           <Reveal delay={200} duration={800}>
             <dl className="mt-20 grid max-w-4xl grid-cols-3 gap-8 border-t border-line/70 pt-10">
-              <Stat n={<CountUp to={40} suffix="+" />} label="Projects delivered" />
-              <Stat n={<CountUp to={1200000} compact />} label="sq. ft. built" />
-              <Stat n={<CountUp to={80} suffix="+" />} label="On-site team" />
+              <Stat n={<CountUp to={40} suffix="+" className="tabular" />} label="Projects delivered" />
+              <Stat n={<CountUp to={1200000} compact className="tabular" />} label="sq. ft. built" />
+              <Stat n={<CountUp to={80} suffix="+" className="tabular" />} label="On-site team" />
             </dl>
           </Reveal>
         </div>
+      </section>
+
+      {/* MARQUEE STRIP — divides hero from work */}
+      <section className="border-y border-line/70 bg-ink py-6 text-paper">
+        <Marquee
+          items={MARQUEE_ITEMS}
+          className="font-serif text-2xl italic md:text-3xl"
+        />
       </section>
 
       {/* SELECTED WORK */}
@@ -143,11 +177,13 @@ export default function HomePage() {
             <dl className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
               {SERVICES.map((s, i) => (
                 <Reveal key={s.title} delay={i * 100} duration={700}>
-                  <div>
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+                  <div className="group">
+                    <div className="font-mono text-[11px] font-semibold tracking-[0.24em] text-accent">
                       {s.n}
                     </div>
-                    <dt className="mt-2 font-serif text-2xl text-ink">{s.title}</dt>
+                    <dt className="mt-2 font-serif text-2xl text-ink transition group-hover:text-bronze">
+                      {s.title}
+                    </dt>
                     <dd className="mt-3 text-sm leading-relaxed text-ink/75">{s.body}</dd>
                   </div>
                 </Reveal>
@@ -197,18 +233,20 @@ export default function HomePage() {
                 proposed next step.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-3">
-                <Link
-                  href="/contact"
-                  className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:opacity-90"
-                >
-                  Start a conversation
-                  <span
-                    aria-hidden
-                    className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+                <Magnetic>
+                  <Link
+                    href="/contact"
+                    className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:opacity-90"
                   >
-                    →
-                  </span>
-                </Link>
+                    Start a conversation
+                    <span
+                      aria-hidden
+                      className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+                    >
+                      →
+                    </span>
+                  </Link>
+                </Magnetic>
                 <a
                   href="tel:+919999999999"
                   className="inline-flex items-center rounded-full border border-paper/25 px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-paper/10"
@@ -228,7 +266,7 @@ function Stat({ n, label }: { n: React.ReactNode; label: string }) {
   return (
     <div>
       <div className="font-serif text-4xl text-ink md:text-5xl">{n}</div>
-      <div className="mt-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">
+      <div className="mt-2 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">
         {label}
       </div>
     </div>
@@ -246,22 +284,24 @@ function ProjectCard({
     .join("")
     .slice(0, 2);
   return (
-    <Link href={`/projects/${project.slug}`} className="group block">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] bg-bone">
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-bone via-paper-2 to-line/60 transition duration-700 group-hover:scale-[1.04]">
-          <span className="font-serif text-7xl italic text-ink/15">{initials}</span>
+    <TiltCard className="group block">
+      <Link href={`/projects/${project.slug}`} className="block">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] bg-bone">
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-paper-2 via-bone to-line/60 transition duration-700 group-hover:scale-[1.04]">
+            <span className="font-serif text-7xl italic text-ink/15">{initials}</span>
+          </div>
+          <div className="absolute bottom-3 left-3 rounded-full bg-paper/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink">
+            {project.kind}
+          </div>
         </div>
-        <div className="absolute bottom-3 left-3 rounded-full bg-paper/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink">
-          {project.kind}
+        <div className="mt-5 flex items-baseline justify-between">
+          <h3 className="font-serif text-xl leading-snug text-ink transition group-hover:text-accent">
+            {project.name}
+          </h3>
+          <span className="font-mono text-xs text-ink/60">{project.year}</span>
         </div>
-      </div>
-      <div className="mt-5 flex items-baseline justify-between">
-        <h3 className="font-serif text-xl leading-snug text-ink transition group-hover:text-accent">
-          {project.name}
-        </h3>
-        <span className="text-xs text-ink/60">{project.year}</span>
-      </div>
-      <p className="mt-1 text-sm text-ink/70">{project.location}</p>
-    </Link>
+        <p className="mt-1 text-sm text-ink/70">{project.location}</p>
+      </Link>
+    </TiltCard>
   );
 }
