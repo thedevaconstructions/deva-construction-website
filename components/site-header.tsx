@@ -98,9 +98,15 @@ export function SiteHeader() {
           {/* CTA — desktop */}
           <Link
             href="/contact"
-            className="hidden items-center rounded-full bg-ink px-6 py-3.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2 md:inline-flex"
+            className="group hidden items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2 md:inline-flex"
           >
             Start a project
+            <span
+              aria-hidden
+              className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+            >
+              →
+            </span>
           </Link>
 
           {/* Hamburger — mobile only */}

@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/reveal";
+
 export const metadata = {
   title: "Contact",
   description:
@@ -9,16 +11,22 @@ export default function ContactPage() {
     <>
       <section>
         <div className="mx-auto max-w-5xl px-6 pb-16 pt-8 lg:px-10">
-          <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
-            Say hello
-          </p>
-          <h1 className="mt-6 font-serif text-5xl leading-[1.02] tracking-tight text-ink md:text-7xl">
-            Tell us about the <span className="italic">build.</span>
-          </h1>
-          <p className="mt-8 max-w-xl text-lg text-ink/75">
-            A plot, a sketch, a wishlist, or nothing more than an idea — send it and we reply
-            inside 24 hours with a first-read from the team.
-          </p>
+          <Reveal duration={500} y={12}>
+            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+              Say hello
+            </p>
+          </Reveal>
+          <Reveal delay={120} duration={900}>
+            <h1 className="mt-6 font-serif text-5xl leading-[1.02] tracking-tight text-ink md:text-7xl">
+              Tell us about the <span className="italic">build.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={280} duration={800}>
+            <p className="mt-8 max-w-xl text-lg text-ink/75">
+              A plot, a sketch, a wishlist, or nothing more than an idea — send it and we reply
+              inside 24 hours with a first-read from the team.
+            </p>
+          </Reveal>
         </div>
       </section>
 
