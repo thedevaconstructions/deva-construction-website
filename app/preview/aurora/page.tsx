@@ -20,7 +20,7 @@ export default function AuroraPreviewPage() {
         {/* Aurora layer */}
         <BgAurora />
 
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-6 lg:px-10 lg:pt-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 lg:px-10 lg:pt-10">
           <Reveal duration={500} y={12}>
             <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/70">
               Bangalore · Since 2018

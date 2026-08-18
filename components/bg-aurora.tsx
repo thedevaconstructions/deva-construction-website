@@ -11,7 +11,7 @@
  */
 export function BgAurora({ className }: { className?: string }) {
   return (
-    <div className={`absolute inset-0 -z-10 overflow-hidden bg-paper ${className ?? ""}`}>
+    <div className={`absolute inset-0 overflow-hidden bg-paper ${className ?? ""}`}>
       {/* Aurora layer 1 — bright coral/orange sweep */}
       <div
         aria-hidden
