@@ -7,50 +7,36 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <>
-      <section className="border-b border-line/60">
-        <div className="mx-auto max-w-4xl px-6 py-24 lg:px-10">
-          <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted">
+      <section>
+        <div className="mx-auto max-w-5xl px-6 pb-16 pt-8 lg:px-10">
+          <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
             Say hello
           </p>
-          <h1 className="mt-4 font-serif text-5xl leading-[1.04] tracking-tight text-ink md:text-6xl">
-            Tell us about the build.
+          <h1 className="mt-6 font-serif text-5xl leading-[1.02] tracking-tight text-ink md:text-7xl">
+            Tell us about the <span className="italic">build.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted">
+          <p className="mt-8 max-w-xl text-lg text-ink/75">
             A plot, a sketch, a wishlist, or nothing more than an idea — send it and we reply
             inside 24 hours with a first-read from the team.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-20 lg:px-10">
+      <section className="mx-auto max-w-6xl px-6 pb-24 lg:px-10">
         <div className="grid gap-16 md:grid-cols-[1fr_1.4fr]">
           <div className="space-y-8 text-sm">
+            <Detail
+              label="Email"
+              href="mailto:hello@devaconstruction.in"
+              value="hello@devaconstruction.in"
+            />
+            <Detail
+              label="Phone / WhatsApp"
+              href="tel:+919999999999"
+              value="+91 99999 99999"
+            />
             <div>
-              <div className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                Email
-              </div>
-              <a
-                href="mailto:hello@devaconstruction.in"
-                className="mt-2 block font-serif text-2xl text-ink hover:underline"
-              >
-                hello@devaconstruction.in
-              </a>
-            </div>
-            <div>
-              <div className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                Phone / WhatsApp
-              </div>
-              <a
-                href="tel:+919999999999"
-                className="mt-2 block font-serif text-2xl text-ink hover:underline"
-              >
-                +91 99999 99999
-              </a>
-            </div>
-            <div>
-              <div className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                Studio
-              </div>
+              <Label>Studio</Label>
               <address className="mt-2 not-italic text-ink/80">
                 Deva Construction
                 <br />
@@ -60,9 +46,7 @@ export default function ContactPage() {
               </address>
             </div>
             <div>
-              <div className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                Hours
-              </div>
+              <Label>Hours</Label>
               <p className="mt-2 text-ink/80">
                 Mon – Sat · 9:30 to 6:30 IST
                 <br />
@@ -75,47 +59,18 @@ export default function ContactPage() {
             action="mailto:hello@devaconstruction.in"
             method="post"
             encType="text/plain"
-            className="space-y-6 rounded-2xl border border-line/70 bg-paper p-8 md:p-10"
+            className="space-y-6 rounded-[28px] border border-line/70 bg-paper/70 p-8 md:p-10"
           >
             <div className="grid gap-6 sm:grid-cols-2">
-              <label className="block text-sm">
-                <span className="mb-2 block text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                  Your name
-                </span>
-                <input
-                  name="name"
-                  required
-                  className="w-full border-b border-line bg-transparent py-2 text-ink outline-none transition focus:border-ink"
-                />
-              </label>
-              <label className="block text-sm">
-                <span className="mb-2 block text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                  Email
-                </span>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  className="w-full border-b border-line bg-transparent py-2 text-ink outline-none transition focus:border-ink"
-                />
-              </label>
+              <Field label="Your name" name="name" required />
+              <Field label="Email" name="email" type="email" required />
             </div>
+            <Field label="Phone (optional)" name="phone" />
             <label className="block text-sm">
-              <span className="mb-2 block text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                Phone (optional)
-              </span>
-              <input
-                name="phone"
-                className="w-full border-b border-line bg-transparent py-2 text-ink outline-none transition focus:border-ink"
-              />
-            </label>
-            <label className="block text-sm">
-              <span className="mb-2 block text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                Project type
-              </span>
+              <Label>Project type</Label>
               <select
                 name="type"
-                className="w-full border-b border-line bg-transparent py-2 text-ink outline-none transition focus:border-ink"
+                className="mt-2 w-full border-b border-ink/25 bg-transparent py-2 text-ink outline-none transition focus:border-ink"
                 defaultValue="residential"
               >
                 <option value="residential">Residential build</option>
@@ -126,31 +81,71 @@ export default function ContactPage() {
               </select>
             </label>
             <label className="block text-sm">
-              <span className="mb-2 block text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                Tell us about the project
-              </span>
+              <Label>Tell us about the project</Label>
               <textarea
                 name="message"
                 rows={5}
                 required
                 placeholder="Plot size, location, timelines, or anything you already know."
-                className="w-full border-b border-line bg-transparent py-2 text-ink outline-none transition focus:border-ink"
+                className="mt-2 w-full border-b border-ink/25 bg-transparent py-2 text-ink outline-none transition focus:border-ink"
               />
             </label>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2"
             >
-              Send enquiry
-              <span aria-hidden>→</span>
+              Send enquiry <span aria-hidden>→</span>
             </button>
-            <p className="text-xs text-muted">
-              This is a placeholder form — it opens your email app. We&apos;ll swap it for a real
-              server-backed form (Resend / Formspree / etc.) before launch.
+            <p className="text-xs text-ink/60">
+              Placeholder form — it opens your email app. We&apos;ll swap it for a real server-backed
+              form (Resend / Formspree) before launch.
             </p>
           </form>
         </div>
       </section>
     </>
+  );
+}
+
+function Label({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/60">
+      {children}
+    </span>
+  );
+}
+
+function Detail({ label, href, value }: { label: string; href: string; value: string }) {
+  return (
+    <div>
+      <Label>{label}</Label>
+      <a href={href} className="mt-2 block font-serif text-2xl text-ink hover:text-accent">
+        {value}
+      </a>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  name,
+  type = "text",
+  required,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  required?: boolean;
+}) {
+  return (
+    <label className="block text-sm">
+      <Label>{label}</Label>
+      <input
+        name={name}
+        type={type}
+        required={required}
+        className="mt-2 w-full border-b border-ink/25 bg-transparent py-2 text-ink outline-none transition focus:border-ink"
+      />
+    </label>
   );
 }

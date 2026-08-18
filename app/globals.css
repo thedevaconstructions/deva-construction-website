@@ -4,12 +4,16 @@
   --font-serif: var(--font-fraunces);
   --font-sans: var(--font-inter);
 
-  --color-ink: #0F1114;
-  --color-paper: #FAFAF7;
-  --color-bone: #F1EEE8;
-  --color-brand: #6257F6;
-  --color-line: #E2DFD8;
-  --color-muted: #6B6960;
+  /* Palette — warm cream paper, deep teal ink, coral accent. */
+  --color-paper: #F1EAE1;
+  --color-paper-2: #EFE7DC;
+  --color-bone: #E9E0D3;
+  --color-ink: #0E3B39;
+  --color-ink-2: #0A2E2D;
+  --color-brand: #0E3B39;
+  --color-accent: #D6845A;
+  --color-line: #D8CFC0;
+  --color-muted: #6E6558;
 }
 
 :root {
@@ -25,11 +29,29 @@ html {
 
 body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Subtle blueprint grid — very low contrast; sits below all content. */
+  background-color: var(--color-paper);
+  background-image:
+    linear-gradient(to right, rgba(14, 59, 57, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14, 59, 57, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
 }
 
-/* Editorial vertical rhythm for long-form content on legal/about pages. */
-.prose h1, .prose h2, .prose h3 {
+/* Editorial: serif faces with tighter tracking; italic used as an accent. */
+.font-serif {
   font-family: var(--font-serif), Georgia, serif;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+}
+
+/* Little coral dot for section eyebrows / active-nav marker. */
+.eyebrow-dot::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  margin-right: 10px;
+  vertical-align: middle;
 }

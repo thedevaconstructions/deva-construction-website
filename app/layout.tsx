@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0F1114",
+  themeColor: "#F1EAE1",
   viewportFit: "cover",
 };
 
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
       <body className="min-h-screen bg-paper text-ink">
         <SiteHeader />
-        <main>{children}</main>
+        <main className="pt-28 lg:pt-32">{children}</main>
         <SiteFooter />
       </body>
     </html>

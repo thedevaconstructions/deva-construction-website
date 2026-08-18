@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Services",
+  title: "Expertise",
   description:
     "Residential construction, commercial fit-outs, renovation, and end-to-end project management across Karnataka.",
 };
@@ -8,7 +8,7 @@ const SERVICES = [
   {
     n: "01",
     title: "Residential Construction",
-    body: "Independent homes and small apartments, structural to interior. Design in-house or a partner architect; we take the drawing set to a signed handover.",
+    body: "Independent homes and small apartments, structural to interior. Design in-house or with a partner architect; we take the drawing set to a signed handover.",
     scope: ["Structural design", "MEP coordination", "Finishing & interiors", "Landscape"],
   },
   {
@@ -20,7 +20,7 @@ const SERVICES = [
   {
     n: "03",
     title: "Renovation & Interiors",
-    body: "Older homes and workspaces re-plotted to how you actually live now. We treat what's there as a constraint to design with — not to fight.",
+    body: "Older homes and workspaces re-plotted to how you actually live now. We treat what's there as a constraint to design with, not to fight against.",
     scope: ["Full-home renovation", "Interior joinery", "Structural retrofit", "Bathroom / kitchen"],
   },
   {
@@ -34,28 +34,32 @@ const SERVICES = [
 export default function ServicesPage() {
   return (
     <>
-      <section className="border-b border-line/60">
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
-          <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted">What we do</p>
-          <h1 className="mt-4 max-w-3xl font-serif text-5xl leading-[1.04] tracking-tight text-ink md:text-6xl">
-            Four services. One team. Everyone in the same room.
+      <section>
+        <div className="mx-auto max-w-7xl px-6 pb-16 pt-8 lg:px-10">
+          <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+            What we do
+          </p>
+          <h1 className="mt-6 max-w-4xl font-serif text-5xl leading-[1.02] tracking-tight text-ink md:text-7xl">
+            Four disciplines. <span className="italic">One</span> team in the same room.
           </h1>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-20 lg:px-10">
+      <section className="mx-auto max-w-6xl px-6 pb-24 lg:px-10">
         <div className="divide-y divide-line/70">
           {SERVICES.map((s) => (
             <article key={s.n} className="grid gap-8 py-14 md:grid-cols-[120px_1fr] md:gap-14">
-              <div className="font-serif text-3xl italic text-ink/40">{s.n}</div>
+              <div className="font-serif text-4xl italic text-accent/70">{s.n}</div>
               <div>
-                <h2 className="font-serif text-3xl tracking-tight text-ink md:text-4xl">{s.title}</h2>
-                <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">{s.body}</p>
+                <h2 className="font-serif text-3xl tracking-tight text-ink md:text-5xl">
+                  {s.title}
+                </h2>
+                <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink/75">{s.body}</p>
                 <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-2">
                   {s.scope.map((item) => (
                     <li
                       key={item}
-                      className="rounded-full border border-line/80 px-3 py-1 text-xs text-ink/75"
+                      className="rounded-full border border-ink/25 bg-paper/60 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink"
                     >
                       {item}
                     </li>
