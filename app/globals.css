@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --font-serif: var(--font-fraunces);
-  --font-sans: var(--font-inter);
+  /* System-font stack — no network fetch, no build stall behind Google Fonts.
+     We can swap to Fraunces/Inter later via self-hosted @font-face when the
+     network is reliable. */
+  --font-serif: ui-serif, Georgia, "Times New Roman", Times, serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
 
   /* Palette — warm cream paper, deep teal ink, coral accent. */
   --color-paper: #F1EAE1;
