@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useRef } from "react";
 
 type Props = {
@@ -18,7 +18,6 @@ type Props = {
  */
 export function TiltCard({ children, className, max = 8 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
 
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
@@ -32,7 +31,6 @@ export function TiltCard({ children, className, max = 8 }: Props) {
   );
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (reduce) return;
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();

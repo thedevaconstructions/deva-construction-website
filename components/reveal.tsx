@@ -10,7 +10,7 @@ type Props = {
   y?: number;
   /** Animation duration, ms. */
   duration?: number;
-  /** Fire only when the element is `threshold` fraction visible. */
+  /** Fire only when this fraction of the element is visible (0-1). */
   threshold?: number;
   /** Optional className passthrough. */
   className?: string;
@@ -19,16 +19,16 @@ type Props = {
 };
 
 /**
- * Fade + rise on first scroll into view. Motion's whileInView + viewport.once
- * handles the IntersectionObserver dance for us, and prefers-reduced-motion
- * is respected automatically -- reduced-motion users get no motion at all.
+ * Fade + rise on scroll into view. Uses motion's whileInView with viewport.once
+ * so IntersectionObserver fires the animation on first entry. Also fires
+ * immediately for elements that are already on-screen when mounted.
  */
 export function Reveal({
   children,
   delay = 0,
   y = 24,
   duration = 700,
-  threshold = 0.15,
+  threshold = 0.1,
   className,
   as = "div",
 }: Props) {
@@ -39,11 +39,10 @@ export function Reveal({
       className={className}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: threshold }}
+      viewport={{ once: true, amount: threshold, margin: "0px 0px -50px 0px" }}
       transition={{
         duration: duration / 1000,
         delay: delay / 1000,
-        // Editorial-easing curve (outExpo-ish) tuned by hand.
         ease: [0.16, 1, 0.3, 1],
       }}
     >

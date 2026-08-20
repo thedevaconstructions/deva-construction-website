@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
 import { useRef } from "react";
 
 type Props = {
@@ -24,7 +24,6 @@ export function Magnetic({
   strength = 14,
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
-  const reduce = useReducedMotion();
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -32,7 +31,6 @@ export function Magnetic({
   const sy = useSpring(y, { stiffness: 300, damping: 20, mass: 0.35 });
 
   function handleMove(e: React.MouseEvent<HTMLSpanElement>) {
-    if (reduce) return;
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();

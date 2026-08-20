@@ -45,13 +45,9 @@ export function CountUp({
 
   useEffect(() => {
     if (!inView) return;
-    const reduce =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setDisplay(`${fmt(to, compact)}${suffix}`);
-      return;
-    }
+    // MotionProvider forces animations on regardless of OS setting, so we
+    // don't shortcut on prefers-reduced-motion here either -- the count
+    // animation is part of the intended experience.
     value.set(0);
     setDisplay(`${fmt(0, compact)}${suffix}`);
     const controls = animate(value, to, {

@@ -5,7 +5,7 @@ import { Reveal } from "@/components/reveal";
 import { Magnetic } from "@/components/magnetic";
 import { TiltCard } from "@/components/tilt-card";
 import { Marquee } from "@/components/marquee";
-import { HeroSceneMount as HeroScene } from "@/components/hero-scene-mount";
+import { BgPaths } from "@/components/bg-paths";
 
 const FEATURED_PROJECTS = [
   { slug: "narayanappa-residence", name: "Narayanappa Residence", location: "Ramgondahalli, Bangalore", year: "2026", kind: "Residential" },
@@ -33,19 +33,17 @@ const MARQUEE_ITEMS = [
 export default function HomePage() {
   return (
     <>
-      {/* HERO — 3D scene behind editorial headline */}
-      <section className="relative overflow-hidden">
-        {/* 3D scene layer — non-blocking, decorative */}
-        <div className="pointer-events-none absolute inset-0 -z-10 opacity-90">
-          <HeroScene className="absolute inset-0" />
-        </div>
-        {/* Soft fade at bottom so grid lines under the text stay legible */}
+      {/* HERO — animated SVG paths behind editorial headline */}
+      <section className="relative overflow-hidden isolate">
+        {/* Background paths — architectural drafting feel */}
+        <BgPaths />
+        {/* Soft fade at bottom so section transition stays smooth */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-paper"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-paper"
         />
 
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-6 lg:px-10 lg:pt-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 lg:px-10 lg:pt-10">
           <Reveal duration={500} y={12}>
             <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/70">
               Bangalore · Since 2018
