@@ -34,12 +34,12 @@ export const metadata: Metadata = {
   },
   description:
     "Deva Construction is a Bangalore-based residential and commercial construction firm. Design-led builds, transparent budgets, on-site management from foundation to handover.",
-  metadataBase: new URL("https://devaconstruction.in"),
+  metadataBase: new URL("https://devaconstructions.in"),
   openGraph: {
     title: "Deva Construction — Design and Built to Elegance",
     description:
       "Bangalore-based residential and commercial construction. Design-led builds, transparent budgets, on-site management from foundation to handover.",
-    url: "https://devaconstruction.in",
+    url: "https://devaconstructions.in",
     siteName: "Deva Construction",
     locale: "en_IN",
     type: "website",
