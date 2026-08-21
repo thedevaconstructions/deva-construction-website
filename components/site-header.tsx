@@ -16,6 +16,24 @@ const NAV = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const isHome = pathname === "/";
+
+  // On the homepage the header starts fully transparent so the opening
+  // terrace frame of the walkthrough is uninterrupted, then fades in once
+  // the visitor has scrolled ~8% of a viewport.
+  const [scrolled, setScrolled] = useState(!isHome);
+  useEffect(() => {
+    if (!isHome) {
+      setScrolled(true);
+      return;
+    }
+    const onScroll = () => {
+      setScrolled(window.scrollY > window.innerHeight * 0.08);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isHome]);
 
   // Close menu when route changes.
   useEffect(() => {
@@ -34,6 +52,11 @@ export function SiteHeader() {
     };
   }, [open]);
 
+  // Shared pill chrome — dissolves at the very top of the homepage.
+  const pill = scrolled
+    ? "bg-paper/85 shadow-[0_1px_2px_rgba(14,59,57,0.05),0_10px_30px_-12px_rgba(14,59,57,0.15)] backdrop-blur-md"
+    : "bg-transparent shadow-none";
+
   return (
     <>
       <header className="pointer-events-none fixed inset-x-0 top-0 z-40 px-4 pt-4 sm:px-6 sm:pt-5 lg:px-10 lg:pt-6">
@@ -42,7 +65,7 @@ export function SiteHeader() {
           <Link
             href="/"
             aria-label="Deva Construction — home"
-            className="flex items-center gap-3 rounded-full bg-paper/85 px-5 py-2.5 shadow-[0_1px_2px_rgba(14,59,57,0.05),0_10px_30px_-12px_rgba(14,59,57,0.15)] backdrop-blur-md"
+            className={`flex items-center gap-3 rounded-full px-5 py-2.5 transition-all duration-500 ${pill}`}
           >
             <Image
               src="/logo-mark.svg"
@@ -65,7 +88,7 @@ export function SiteHeader() {
           {/* Center nav pill — desktop only */}
           <nav
             aria-label="Primary"
-            className="hidden flex-1 items-center justify-center rounded-full bg-paper/85 px-8 py-4 shadow-[0_1px_2px_rgba(14,59,57,0.05),0_10px_30px_-12px_rgba(14,59,57,0.15)] backdrop-blur-md md:flex"
+            className={`hidden flex-1 items-center justify-center rounded-full px-8 py-4 transition-all duration-500 md:flex ${pill}`}
           >
             <ul className="flex items-center gap-10">
               {NAV.map((item) => {

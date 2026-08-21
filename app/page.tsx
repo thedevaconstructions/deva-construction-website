@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { WordStagger } from "@/components/word-stagger";
 import { CountUp } from "@/components/count-up";
 import { Reveal } from "@/components/reveal";
 import { Magnetic } from "@/components/magnetic";
 import { TiltCard } from "@/components/tilt-card";
 import { Marquee } from "@/components/marquee";
-import { BgPaths } from "@/components/bg-paths";
+import { Walkthrough } from "@/components/walkthrough";
 
 const FEATURED_PROJECTS = [
   { slug: "narayanappa-residence", name: "Narayanappa Residence", location: "Ramgondahalli, Bangalore", year: "2026", kind: "Residential" },
@@ -33,74 +32,14 @@ const MARQUEE_ITEMS = [
 export default function HomePage() {
   return (
     <>
-      {/* HERO — animated SVG paths behind editorial headline */}
-      <section className="relative overflow-hidden isolate">
-        {/* Background paths — architectural drafting feel */}
-        <BgPaths />
-        {/* Soft fade at bottom so section transition stays smooth */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-paper"
-        />
+      {/* HERO — one-take walkthrough of a finished build, scrubbed by scroll */}
+      <Walkthrough />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 lg:px-10 lg:pt-10">
-          <Reveal duration={500} y={12}>
-            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/70">
-              Bangalore · Since 2018
-            </p>
-          </Reveal>
-
-          <h1 className="mt-8 font-serif text-[52px] leading-[0.98] tracking-tight text-ink md:text-[92px] lg:text-[120px]">
-            <WordStagger
-              segments={[
-                <span key="design">Design</span>,
-                <span key="built">
-                  &amp; <span className="italic text-accent">Built</span>
-                </span>,
-                <span key="elegance">to elegance.</span>,
-              ]}
-              gap={140}
-              delay={120}
-            />
-          </h1>
-
-          <div className="mt-10 grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-end">
-            <Reveal delay={500} duration={800}>
-              <p className="max-w-xl text-base leading-relaxed text-ink/75 md:text-lg">
-                Deva Construction runs residential, commercial, and renovation builds across
-                Karnataka — end-to-end, from the first drawing to the day you hand over the keys.
-              </p>
-            </Reveal>
-
-            <Reveal delay={700} duration={800}>
-              <div className="flex flex-wrap items-center justify-start gap-3 md:justify-end">
-                <Magnetic>
-                  <Link
-                    href="/contact"
-                    className="group inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2"
-                  >
-                    Start a project
-                    <span
-                      aria-hidden
-                      className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-                    >
-                      →
-                    </span>
-                  </Link>
-                </Magnetic>
-                <Link
-                  href="/projects"
-                  className="inline-flex items-center rounded-full border border-ink/30 bg-paper/60 px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink backdrop-blur-sm transition hover:bg-bone"
-                >
-                  See work
-                </Link>
-              </div>
-            </Reveal>
-          </div>
-
-          {/* Stats strip */}
-          <Reveal delay={200} duration={800}>
-            <dl className="mt-20 grid max-w-4xl grid-cols-3 gap-8 border-t border-line/70 pt-10">
+      {/* Stats strip — slim bone band between the sequence and the editorial page */}
+      <section className="border-t border-line/70 bg-paper-2/70">
+        <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
+          <Reveal duration={800}>
+            <dl className="grid max-w-4xl grid-cols-3 gap-8">
               <Stat n={<CountUp to={40} suffix="+" className="tabular" />} label="Projects delivered" />
               <Stat n={<CountUp to={1200000} compact className="tabular" />} label="sq. ft. built" />
               <Stat n={<CountUp to={80} suffix="+" className="tabular" />} label="On-site team" />

@@ -1,11 +1,15 @@
-@import "tailwindcss";
+/* Pin content scanning to this project (relative to this file) so utility
+   generation never depends on the process working directory. */
+@import "tailwindcss" source("../");
 
 @theme {
-  /* System-font stack — no network fetch. Swap to self-hosted Fraunces + Inter later. */
-  --font-serif: ui-serif, "Fraunces", "Playfair Display", Georgia, "Times New Roman", Times, serif;
-  --font-sans: ui-sans-serif, "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  --font-mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  /* Loaded via next/font/google in app/layout.tsx — variables land on <html>. */
+  --font-serif: var(--font-fraunces), ui-serif, "Playfair Display", Georgia,
+    "Times New Roman", Times, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, Consolas,
+    monospace;
 
   /* Palette — "Blueprint & Cast Iron"
      Warm bone paper, deep stone ink, safety-orange accent, burnished-bronze
