@@ -1,0 +1,9 @@
+# Source video masters. The committed WebP sets in public/walkthrough are
+# generated from these locally via `npm run frames`; the videos themselves
+# must never reach the deployment. Vercel does NOT read .gitignore, so this
+# file is what actually keeps ~150MB of MP4 out of every upload.
+*.mp4
+
+# Local-only
+dev.log
+.next
