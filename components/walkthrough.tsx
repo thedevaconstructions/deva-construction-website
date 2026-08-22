@@ -26,7 +26,7 @@ const frameUrl = (set: string, i: number) =>
   `/walkthrough/${set}/frame-${String(i + 1).padStart(4, "0")}.webp`;
 
 /** Frames shown by the reduced-motion / stacked fallback, one per beat. */
-const STILL_FRAMES = [0, 48, 106, 172, 233];
+const STILL_FRAMES = [0, 59, 110, 170, 230];
 
 export function Walkthrough() {
   // null until we know; decided once on mount so SSR and hydration agree.

@@ -43,7 +43,7 @@ function Overline({ children }: { children: React.ReactNode }) {
 export const BEATS: BeatDef[] = [
   {
     id: "approach",
-    range: [0, 0.12],
+    range: [0, 0.16],
     placement: "items-end justify-start pb-24 md:pb-28",
     render: () => (
       <div className="relative max-w-2xl p-6 md:p-8">
@@ -63,7 +63,7 @@ export const BEATS: BeatDef[] = [
   },
   {
     id: "threshold",
-    range: [0.12, 0.31],
+    range: [0.16, 0.335],
     from: "left",
     placement: "items-center justify-start",
     render: () => (
@@ -83,7 +83,7 @@ export const BEATS: BeatDef[] = [
   },
   {
     id: "structure",
-    range: [0.31, 0.58],
+    range: [0.335, 0.628],
     from: "right",
     placement: "items-center justify-end",
     render: () => (
@@ -106,8 +106,8 @@ export const BEATS: BeatDef[] = [
           </li>
           <li className="flex gap-3">
             <span aria-hidden className="mt-[0.6em] h-px w-5 shrink-0 bg-bronze/50" />
-            Structural design and finishing run by the same team, in the same
-            room.
+            The stone on that island was chosen after the layout, not before —
+            slab, seam, and sink cut out together on site.
           </li>
         </ul>
       </div>
@@ -115,7 +115,7 @@ export const BEATS: BeatDef[] = [
   },
   {
     id: "services",
-    range: [0.58, 0.86],
+    range: [0.628, 0.795],
     placement: "items-center justify-center text-center",
     render: () => (
       <div className="relative max-w-2xl p-6 md:p-8">
@@ -140,7 +140,7 @@ export const BEATS: BeatDef[] = [
   },
   {
     id: "view",
-    range: [0.86, 1],
+    range: [0.795, 1],
     placement: "items-center justify-center text-center",
     render: (staticLayout) => (
       <div className="relative max-w-2xl p-6 md:p-8">
