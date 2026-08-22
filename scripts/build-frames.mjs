@@ -2,17 +2,31 @@
  * Frame pipeline for the one-take walkthrough hero.
  *
  * Reads the raw PNG sequence from SRC_DIR and writes two committed WebP sets:
- *   public/walkthrough/d/frame-0001.webp …  desktop, 1920×1080, every frame
- *   public/walkthrough/m/frame-0001.webp …  mobile,  1280×720,  every frame
+ *   public/walkthrough/d/frame-0001.webp …  desktop, 3840×2160, every frame
+ *   public/walkthrough/m/frame-0001.webp …  mobile,  2560×1440, every frame
  *
- * Source is a 3840x2160 @ 25.5Mbps upscale of the villa master, lanczos-
- * downscaled to 1920x1080 during frame extraction:
- *   ffmpeg -i upscaled-video.mp4 -vf "scale=1920:1080:flags=lanczos" \
- *     frame-%04d.png
- * Downscaling from true 4K is why 1080p is honest here — unlike the
- * previous 720p source, the detail genuinely exists. Serving the full
- * 2160p would roughly quadruple bytes for detail no viewport actually
- * resolves (canvas caps at viewport x min(DPR,3)).
+ * Source is a 3840x2160 @ 25.5Mbps upscale of the villa master, extracted
+ * at native resolution with no downscale:
+ *   ffmpeg -i upscaled-video.mp4 frame-%04d.png
+ *
+ * Desktop serves the full 2160p because the canvas genuinely resolves it.
+ * Backing store is viewport x min(DPR,3), and cover-scale is
+ * max(backingW/frameW, backingH/frameH) — measured against real devices:
+ *
+ *   device                      backing      1080p src   4K src
+ *   MacBook Pro 16" DPR 2       3456x2160    UP 2.00x    1.00x
+ *   4K desktop DPR 1            3840x2160    UP 2.00x    1.00x
+ *   27" 1440p DPR 1             2560x1440    UP 1.33x    0.67x
+ *   iPhone 14 portrait DPR 3    1170x2532    UP 2.34x    UP 1.17x
+ *
+ * A 1080p set was being upscaled on every high-DPI device. Mobile portrait
+ * is the worst case: landscape footage covering a portrait viewport scales
+ * by HEIGHT, so a phone wants ~2532px of vertical detail.
+ *
+ * Mobile stops at 1440p rather than 4K on purpose: phones need the vertical
+ * detail but cannot hold 292 decoded 4K bitmaps (3840*2160*4B = 33MB each)
+ * without being killed by the OS. 1440p is the compromise — still a large
+ * improvement on 720p, still survivable.
  *
  * Source frames are extracted as lossless PNG (not JPEG) — the pipeline is
  * source-video → WebP with exactly one lossy hop instead of two. A JPEG
@@ -42,8 +56,8 @@ const OUT_ROOT = new URL("../public/walkthrough/", import.meta.url).pathname
   .replace(/^\/([A-Za-z]:)/, "$1");
 
 const SETS = [
-  { name: "d", width: 1920, height: 1080, quality: 92, step: 1 },
-  { name: "m", width: 1280, height: 720, quality: 90, step: 1 },
+  { name: "d", width: 3840, height: 2160, quality: 86, step: 1 },
+  { name: "m", width: 2560, height: 1440, quality: 88, step: 1 },
 ];
 
 const files = (await readdir(SRC_DIR))

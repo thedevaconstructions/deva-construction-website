@@ -12,13 +12,27 @@ import { WalkthroughProgress } from "@/components/walkthrough-progress";
  * full-screen canvas inside a tall scroll container. Scroll progress 0→1 maps
  * linearly to frame index with a lerp so fast scrolls glide instead of strobing.
  *
- * Frames live in /public/walkthrough — `d/` (1600×900, all 292) for desktop,
- * `m/` (960×540, every 2nd) for mobile. Zero-padded names make the URL pure
- * arithmetic; regenerate both sets with `npm run frames`.
+ * Frames live in /public/walkthrough — `d/` (3840×2160) and `m/` (2560×1440),
+ * both all 292 frames. Zero-padded names make the URL pure arithmetic;
+ * regenerate both sets with `npm run frames`. Which set a device gets is
+ * decided by pickSet() below, on backing-store size rather than breakpoint.
  */
 
-const DESKTOP = { set: "d", count: 292 };
-const MOBILE = { set: "m", count: 292 };
+/**
+ * Two frame sets, picked by the canvas backing store the device actually
+ * needs — NOT by viewport width.
+ *
+ * The canvas is full-screen, so its backing store is viewport × min(DPR, 3),
+ * and cover-scale is max(backingW/frameW, backingH/frameH). UHD is only
+ * worth its decode cost when STANDARD would be upscaled; below that it costs
+ * a 33MB bitmap decode per frame (measured: ~1s stalls, renderer hangs under
+ * sustained scrubbing) to render detail the display cannot resolve.
+ *
+ * STANDARD at 2560×1440 still covers a 1920×1080 backing store without any
+ * upscale, so mid-tier desktops lose nothing by taking it.
+ */
+const UHD = { set: "d", count: 292, w: 3840, h: 2160 };
+const STANDARD = { set: "m", count: 292, w: 2560, h: 1440 };
 
 const PAPER = "#F4EFE8";
 
@@ -27,6 +41,23 @@ const frameUrl = (set: string, i: number) =>
 
 /** Frames shown by the reduced-motion / stacked fallback, one per beat. */
 const STILL_FRAMES = [0, 59, 129, 209, 284];
+
+/**
+ * Pick the smallest set that covers this device's canvas backing store
+ * without upscaling. Phones are capped at STANDARD regardless: a portrait
+ * viewport covering landscape footage scales by height, so no set we ship
+ * fully covers a 3x-DPI phone, and 292 decoded 4K bitmaps would get the tab
+ * killed long before the extra detail paid for itself.
+ */
+function pickSet() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  const backingW = window.innerWidth * dpr;
+  const backingH = window.innerHeight * dpr;
+  const isPhone = window.matchMedia("(max-width: 767px)").matches;
+  if (isPhone) return STANDARD;
+  const standardUpscales = backingW > STANDARD.w || backingH > STANDARD.h;
+  return standardUpscales ? UHD : STANDARD;
+}
 
 export function Walkthrough() {
   // null until we know; decided once on mount so SSR and hydration agree.
@@ -56,8 +87,8 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
   const loadedRef = useRef<boolean[]>([]);
   const [loadProgress, setLoadProgress] = useState(0);
   const [ready, setReady] = useState(false);
-  // Set once the breakpoint is known — 292 desktop / 146 mobile.
-  const [frameCount, setFrameCount] = useState(DESKTOP.count);
+  // Both sets are 292 frames; kept in state so a differing set is handled.
+  const [frameCount, setFrameCount] = useState(STANDARD.count);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -67,8 +98,7 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
   // Preload the whole set for the current breakpoint.
   useEffect(() => {
     if (!live) return;
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
-    const { set, count } = isMobile ? MOBILE : DESKTOP;
+    const { set, count } = pickSet();
     setFrameCount(count);
 
     let done = 0;
@@ -193,7 +223,7 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
         {/* Frame 1 as a real image under the canvas: first paint + no-JS. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={frameUrl(DESKTOP.set, 0)}
+          src={frameUrl(STANDARD.set, 0)}
           alt=""
           aria-hidden
           className="absolute inset-0 h-full w-full object-cover"
@@ -244,7 +274,7 @@ function StackedStills() {
         <div key={beat.id} className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={frameUrl(DESKTOP.set, STILL_FRAMES[i])}
+            src={frameUrl(STANDARD.set, STILL_FRAMES[i])}
             alt=""
             className="h-[70vh] w-full object-cover"
             loading={i === 0 ? "eager" : "lazy"}
