@@ -40,3 +40,6 @@ yarn-error.log*
 
 # local dev server output
 dev.log
+
+.vercel
+.env*

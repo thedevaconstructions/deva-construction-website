@@ -115,7 +115,7 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
     let width = 0;
     let height = 0;
     let current = targetFrame.get();
