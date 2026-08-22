@@ -2,20 +2,22 @@
  * Frame pipeline for the one-take walkthrough hero.
  *
  * Reads the raw PNG sequence from SRC_DIR and writes two committed WebP sets:
- *   public/walkthrough/d/frame-0001.webp …  desktop, 1280×720, every frame
- *   public/walkthrough/m/frame-0001.webp …  mobile,  1280×720, every frame
+ *   public/walkthrough/d/frame-0001.webp …  desktop, 1920×1080, every frame
+ *   public/walkthrough/m/frame-0001.webp …  mobile,  1280×720,  every frame
  *
- * Resolution matches the source video's native 1280x720 exactly — no
- * upscale. Upscaling a 720p source to 1080p doesn't add real detail, it
- * just costs more bytes to store the same information plus interpolation
- * blur, which defeats the point of a "clear quality" fix.
+ * Source is a 3840x2160 @ 25.5Mbps upscale of the villa master, lanczos-
+ * downscaled to 1920x1080 during frame extraction:
+ *   ffmpeg -i upscaled-video.mp4 -vf "scale=1920:1080:flags=lanczos" \
+ *     frame-%04d.png
+ * Downscaling from true 4K is why 1080p is honest here — unlike the
+ * previous 720p source, the detail genuinely exists. Serving the full
+ * 2160p would roughly quadruple bytes for detail no viewport actually
+ * resolves (canvas caps at viewport x min(DPR,3)).
  *
  * Source frames are extracted as lossless PNG (not JPEG) — the pipeline is
  * source-video → WebP with exactly one lossy hop instead of two. A JPEG
- * intermediate at any quality setting throws away information the H.264
- * source still had; PNG doesn't. This is the only remaining quality lever
- * on the *encode* side — the source video's own 1280x720 @ ~2Mbps H.264
- * compression is the real ceiling now.
+ * intermediate at any quality setting throws away information the source
+ * still had; PNG doesn't.
  *
  * Preload byte budget is not a constraint here (explicit call) — both sets
  * are full source resolution at near-lossless quality, and mobile no longer
@@ -34,14 +36,14 @@ import { readdir, mkdir, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
-const SRC_DIR = "C:/Users/chinm/Downloads/fpv-mansion-frames-png";
+const SRC_DIR = "C:/Users/chinm/Downloads/villa-4k-frames-png";
 const OUT_ROOT = new URL("../public/walkthrough/", import.meta.url).pathname
   // On Windows the URL pathname starts with a slash before the drive letter.
   .replace(/^\/([A-Za-z]:)/, "$1");
 
 const SETS = [
-  { name: "d", width: 1280, height: 720, quality: 97, step: 1 },
-  { name: "m", width: 1280, height: 720, quality: 95, step: 1 },
+  { name: "d", width: 1920, height: 1080, quality: 92, step: 1 },
+  { name: "m", width: 1280, height: 720, quality: 90, step: 1 },
 ];
 
 const files = (await readdir(SRC_DIR))

@@ -43,3 +43,9 @@ dev.log
 
 .vercel
 .env*
+
+# source video masters — the committed frame sets in public/walkthrough are
+# generated from these via `npm run frames`; the videos themselves are far
+# too large to track.
+/upscaled-video.mp4
+*.mp4
