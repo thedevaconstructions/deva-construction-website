@@ -22,8 +22,8 @@ const OUT_ROOT = new URL("../public/walkthrough/", import.meta.url).pathname
   .replace(/^\/([A-Za-z]:)/, "$1");
 
 const SETS = [
-  { name: "d", width: 1600, height: 900, quality: 72, step: 1 },
-  { name: "m", width: 960, height: 540, quality: 65, step: 2 },
+  { name: "d", width: 1920, height: 1080, quality: 85, step: 1 },
+  { name: "m", width: 1280, height: 720, quality: 75, step: 2 },
 ];
 
 const files = (await readdir(SRC_DIR))
