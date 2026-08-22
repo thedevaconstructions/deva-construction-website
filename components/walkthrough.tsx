@@ -18,7 +18,7 @@ import { WalkthroughProgress } from "@/components/walkthrough-progress";
  */
 
 const DESKTOP = { set: "d", count: 292 };
-const MOBILE = { set: "m", count: 146 };
+const MOBILE = { set: "m", count: 292 };
 
 const PAPER = "#F4EFE8";
 

@@ -2,8 +2,13 @@
  * Frame pipeline for the one-take walkthrough hero.
  *
  * Reads the raw JPEG sequence from SRC_DIR and writes two committed WebP sets:
- *   public/walkthrough/d/frame-0001.webp …  desktop, 1600×900, every frame
- *   public/walkthrough/m/frame-0001.webp …  mobile,   960×540, every 2nd frame
+ *   public/walkthrough/d/frame-0001.webp …  desktop, 1920×1080, every frame
+ *   public/walkthrough/m/frame-0001.webp …  mobile,  1920×1080, every frame
+ *
+ * Preload byte budget is not a constraint here (explicit call) — both sets
+ * are full source resolution at near-lossless quality, and mobile no longer
+ * skips frames (the skip made the motion choppier, not just the image
+ * softer). Revisit if load time on slow connections becomes a complaint.
  *
  * Swapping footage later = drop the new frames in SRC_DIR (any zero-padded
  * jpg sequence sorted by name) and re-run `npm run frames`.
@@ -22,8 +27,8 @@ const OUT_ROOT = new URL("../public/walkthrough/", import.meta.url).pathname
   .replace(/^\/([A-Za-z]:)/, "$1");
 
 const SETS = [
-  { name: "d", width: 1920, height: 1080, quality: 85, step: 1 },
-  { name: "m", width: 1280, height: 720, quality: 75, step: 2 },
+  { name: "d", width: 1920, height: 1080, quality: 95, step: 1 },
+  { name: "m", width: 1920, height: 1080, quality: 92, step: 1 },
 ];
 
 const files = (await readdir(SRC_DIR))
