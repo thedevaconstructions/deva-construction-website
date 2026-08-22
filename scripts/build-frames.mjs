@@ -1,7 +1,7 @@
 /**
  * Frame pipeline for the one-take walkthrough hero.
  *
- * Reads the raw JPEG sequence from SRC_DIR and writes two committed WebP sets:
+ * Reads the raw PNG sequence from SRC_DIR and writes two committed WebP sets:
  *   public/walkthrough/d/frame-0001.webp …  desktop, 1280×720, every frame
  *   public/walkthrough/m/frame-0001.webp …  mobile,  1280×720, every frame
  *
@@ -10,13 +10,21 @@
  * just costs more bytes to store the same information plus interpolation
  * blur, which defeats the point of a "clear quality" fix.
  *
+ * Source frames are extracted as lossless PNG (not JPEG) — the pipeline is
+ * source-video → WebP with exactly one lossy hop instead of two. A JPEG
+ * intermediate at any quality setting throws away information the H.264
+ * source still had; PNG doesn't. This is the only remaining quality lever
+ * on the *encode* side — the source video's own 1280x720 @ ~2Mbps H.264
+ * compression is the real ceiling now.
+ *
  * Preload byte budget is not a constraint here (explicit call) — both sets
  * are full source resolution at near-lossless quality, and mobile no longer
  * skips frames (the skip made the motion choppier, not just the image
  * softer). Revisit if load time on slow connections becomes a complaint.
  *
  * Swapping footage later = drop the new frames in SRC_DIR (any zero-padded
- * jpg sequence sorted by name) and re-run `npm run frames`.
+ * png sequence sorted by name; extract with `ffmpeg -i in.mp4 frame-%04d.png`
+ * — not .jpg, see above) and re-run `npm run frames`.
  *
  * Also samples the four corners of the first frame and prints their average
  * colour — the page background (--color-paper, #F4EFE8) should sit within a
@@ -26,18 +34,18 @@ import { readdir, mkdir, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
-const SRC_DIR = "C:/Users/chinm/Downloads/fpv-mansion-frames";
+const SRC_DIR = "C:/Users/chinm/Downloads/fpv-mansion-frames-png";
 const OUT_ROOT = new URL("../public/walkthrough/", import.meta.url).pathname
   // On Windows the URL pathname starts with a slash before the drive letter.
   .replace(/^\/([A-Za-z]:)/, "$1");
 
 const SETS = [
-  { name: "d", width: 1280, height: 720, quality: 95, step: 1 },
-  { name: "m", width: 1280, height: 720, quality: 92, step: 1 },
+  { name: "d", width: 1280, height: 720, quality: 97, step: 1 },
+  { name: "m", width: 1280, height: 720, quality: 95, step: 1 },
 ];
 
 const files = (await readdir(SRC_DIR))
-  .filter((f) => /\.jpe?g$/i.test(f))
+  .filter((f) => /\.png$/i.test(f))
   .sort();
 if (files.length === 0) {
   console.error(`No JPEG frames found in ${SRC_DIR}`);
