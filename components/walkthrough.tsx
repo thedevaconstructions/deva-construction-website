@@ -17,8 +17,8 @@ import { WalkthroughProgress } from "@/components/walkthrough-progress";
  * arithmetic; regenerate both sets with `npm run frames`.
  */
 
-const DESKTOP = { set: "d", count: 292 };
-const MOBILE = { set: "m", count: 292 };
+const DESKTOP = { set: "d", count: 240 };
+const MOBILE = { set: "m", count: 240 };
 
 const PAPER = "#F4EFE8";
 
@@ -26,7 +26,7 @@ const frameUrl = (set: string, i: number) =>
   `/walkthrough/${set}/frame-${String(i + 1).padStart(4, "0")}.webp`;
 
 /** Frames shown by the reduced-motion / stacked fallback, one per beat. */
-const STILL_FRAMES = [0, 59, 129, 209, 284];
+const STILL_FRAMES = [0, 48, 106, 172, 233];
 
 export function Walkthrough() {
   // null until we know; decided once on mount so SSR and hydration agree.

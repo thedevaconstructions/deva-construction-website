@@ -2,8 +2,13 @@
  * Frame pipeline for the one-take walkthrough hero.
  *
  * Reads the raw JPEG sequence from SRC_DIR and writes two committed WebP sets:
- *   public/walkthrough/d/frame-0001.webp …  desktop, 1920×1080, every frame
- *   public/walkthrough/m/frame-0001.webp …  mobile,  1920×1080, every frame
+ *   public/walkthrough/d/frame-0001.webp …  desktop, 1280×720, every frame
+ *   public/walkthrough/m/frame-0001.webp …  mobile,  1280×720, every frame
+ *
+ * Resolution matches the source video's native 1280x720 exactly — no
+ * upscale. Upscaling a 720p source to 1080p doesn't add real detail, it
+ * just costs more bytes to store the same information plus interpolation
+ * blur, which defeats the point of a "clear quality" fix.
  *
  * Preload byte budget is not a constraint here (explicit call) — both sets
  * are full source resolution at near-lossless quality, and mobile no longer
@@ -21,14 +26,14 @@ import { readdir, mkdir, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
-const SRC_DIR = "C:/Users/chinm/Downloads/website frames";
+const SRC_DIR = "C:/Users/chinm/Downloads/fpv-mansion-frames";
 const OUT_ROOT = new URL("../public/walkthrough/", import.meta.url).pathname
   // On Windows the URL pathname starts with a slash before the drive letter.
   .replace(/^\/([A-Za-z]:)/, "$1");
 
 const SETS = [
-  { name: "d", width: 1920, height: 1080, quality: 95, step: 1 },
-  { name: "m", width: 1920, height: 1080, quality: 92, step: 1 },
+  { name: "d", width: 1280, height: 720, quality: 95, step: 1 },
+  { name: "m", width: 1280, height: 720, quality: 92, step: 1 },
 ];
 
 const files = (await readdir(SRC_DIR))
