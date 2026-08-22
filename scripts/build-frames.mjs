@@ -5,9 +5,19 @@
  *   public/walkthrough/d/frame-0001.webp …  desktop, 3840×2160, every frame
  *   public/walkthrough/m/frame-0001.webp …  mobile,  2560×1440, every frame
  *
- * Source is a 3840x2160 @ 25.5Mbps upscale of the villa master, extracted
- * at native resolution with no downscale:
- *   ffmpeg -i upscaled-video.mp4 frame-%04d.png
+ * Source is fpv-tour-4k-5s-30s.mp4 — 25s of NATIVE 3840x2160 AV1 (10.3Mbps),
+ * a real 4K master rather than an AI upscale. Extracted at every 3rd frame,
+ * 750 -> 250, at native resolution:
+ *   ffmpeg -i fpv-tour-4k-5s-30s.mp4 -vf "select='not(mod(n\,3))'" \
+ *     -vsync 0 frame-%04d.png
+ *
+ * The 1-in-3 subsample is a deliberate weight decision, not laziness. Real
+ * 4K detail encodes to ~275KB/frame where the previous AI upscale managed
+ * ~39KB (interpolated pixels compress to nearly nothing). All 750 frames
+ * would be ~345MB across both sets, which breaks three things at once:
+ * preload time, decoded-bitmap memory (750 x 33MB), and repo size. At 250
+ * frames the scrub still reads as continuous because scroll rate, not
+ * playback rate, drives it.
  *
  * Desktop serves the full 2160p because the canvas genuinely resolves it.
  * Backing store is viewport x min(DPR,3), and cover-scale is
@@ -24,7 +34,7 @@
  * by HEIGHT, so a phone wants ~2532px of vertical detail.
  *
  * Mobile stops at 1440p rather than 4K on purpose: phones need the vertical
- * detail but cannot hold 292 decoded 4K bitmaps (3840*2160*4B = 33MB each)
+ * detail but cannot hold 250 decoded 4K bitmaps (3840*2160*4B = 33MB each)
  * without being killed by the OS. 1440p is the compromise — still a large
  * improvement on 720p, still survivable.
  *
@@ -33,14 +43,13 @@
  * intermediate at any quality setting throws away information the source
  * still had; PNG doesn't.
  *
- * Preload byte budget is not a constraint here (explicit call) — both sets
- * are full source resolution at near-lossless quality, and mobile no longer
- * skips frames (the skip made the motion choppier, not just the image
- * softer). Revisit if load time on slow connections becomes a complaint.
+ * The component loads progressively (see walkthrough.tsx): scrubbing unlocks
+ * after a small prime batch and the rest streams in behind it, so total set
+ * weight no longer gates time-to-interactive.
  *
- * Swapping footage later = drop the new frames in SRC_DIR (any zero-padded
- * png sequence sorted by name; extract with `ffmpeg -i in.mp4 frame-%04d.png`
- * — not .jpg, see above) and re-run `npm run frames`.
+ * Swapping footage later = drop new frames in SRC_DIR (any zero-padded png
+ * sequence sorted by name — PNG not JPEG, see above), update the frame count
+ * in walkthrough.tsx, and re-run `npm run frames`.
  *
  * Also samples the four corners of the first frame and prints their average
  * colour — the page background (--color-paper, #F4EFE8) should sit within a
@@ -50,21 +59,21 @@ import { readdir, mkdir, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
-const SRC_DIR = "C:/Users/chinm/Downloads/villa-4k-frames-png";
+const SRC_DIR = "C:/Users/chinm/Downloads/villa-tour4k-png";
 const OUT_ROOT = new URL("../public/walkthrough/", import.meta.url).pathname
   // On Windows the URL pathname starts with a slash before the drive letter.
   .replace(/^\/([A-Za-z]:)/, "$1");
 
 const SETS = [
-  { name: "d", width: 3840, height: 2160, quality: 86, step: 1 },
-  { name: "m", width: 2560, height: 1440, quality: 88, step: 1 },
+  { name: "d", width: 3840, height: 2160, quality: 84, step: 1 },
+  { name: "m", width: 2560, height: 1440, quality: 86, step: 1 },
 ];
 
 const files = (await readdir(SRC_DIR))
   .filter((f) => /\.png$/i.test(f))
   .sort();
 if (files.length === 0) {
-  console.error(`No JPEG frames found in ${SRC_DIR}`);
+  console.error(`No PNG frames found in ${SRC_DIR}`);
   process.exit(1);
 }
 console.log(`${files.length} source frames in ${SRC_DIR}`);
@@ -127,7 +136,12 @@ for (const set of SETS) {
           .resize(set.width, set.height, { fit: "cover" })
           .webp({ quality: set.quality })
           .toFile(out);
-        bytes += (await stat(out)).size;
+        // Resolve the size BEFORE touching the accumulator. Writing this as
+        // `bytes += (await stat(out)).size` reads `bytes` before the await,
+        // so concurrent workers overwrite each other's increments and the
+        // total under-reports by roughly the pool size.
+        const size = (await stat(out)).size;
+        bytes += size;
         done++;
       }
     })

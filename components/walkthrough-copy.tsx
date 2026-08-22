@@ -43,7 +43,7 @@ function Overline({ children }: { children: React.ReactNode }) {
 export const BEATS: BeatDef[] = [
   {
     id: "approach",
-    range: [0, 0.12],
+    range: [0, 0.14],
     placement: "items-end justify-start pb-24 md:pb-28",
     render: () => (
       <div className="relative max-w-2xl p-6 md:p-8">
@@ -63,7 +63,7 @@ export const BEATS: BeatDef[] = [
   },
   {
     id: "threshold",
-    range: [0.12, 0.31],
+    range: [0.14, 0.30],
     from: "left",
     placement: "items-center justify-start",
     render: () => (
@@ -83,7 +83,7 @@ export const BEATS: BeatDef[] = [
   },
   {
     id: "structure",
-    range: [0.31, 0.58],
+    range: [0.30, 0.60],
     from: "right",
     placement: "items-center justify-end",
     render: () => (
@@ -115,7 +115,7 @@ export const BEATS: BeatDef[] = [
   },
   {
     id: "services",
-    range: [0.58, 0.86],
+    range: [0.60, 0.80],
     placement: "items-center justify-center text-center",
     render: () => (
       <div className="relative max-w-2xl p-6 md:p-8">
@@ -140,7 +140,7 @@ export const BEATS: BeatDef[] = [
   },
   {
     id: "view",
-    range: [0.86, 1],
+    range: [0.80, 1],
     placement: "items-center justify-center text-center",
     render: (staticLayout) => (
       <div className="relative max-w-2xl p-6 md:p-8">

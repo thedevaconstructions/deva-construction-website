@@ -15,10 +15,10 @@ import { useMotionValueEvent, type MotionValue } from "motion/react";
 
 const CHAPTERS = [
   { label: "Approach", at: 0 },
-  { label: "Threshold", at: 0.12 },
-  { label: "Structure", at: 0.31 },
-  { label: "Services", at: 0.58 },
-  { label: "View", at: 0.86 },
+  { label: "Threshold", at: 0.14 },
+  { label: "Structure", at: 0.30 },
+  { label: "Services", at: 0.60 },
+  { label: "View", at: 0.80 },
 ];
 
 export function WalkthroughProgress({

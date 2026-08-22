@@ -8,12 +8,12 @@ import { WalkthroughProgress } from "@/components/walkthrough-progress";
 /**
  * One-take walkthrough hero.
  *
- * A 292-frame FPV move through a finished house, scrubbed by scroll: sticky
+ * A 250-frame FPV move through a finished house, scrubbed by scroll: sticky
  * full-screen canvas inside a tall scroll container. Scroll progress 0→1 maps
  * linearly to frame index with a lerp so fast scrolls glide instead of strobing.
  *
  * Frames live in /public/walkthrough — `d/` (3840×2160) and `m/` (2560×1440),
- * both all 292 frames. Zero-padded names make the URL pure arithmetic;
+ * both all 250 frames. Zero-padded names make the URL pure arithmetic;
  * regenerate both sets with `npm run frames`. Which set a device gets is
  * decided by pickSet() below, on backing-store size rather than breakpoint.
  */
@@ -31,8 +31,8 @@ import { WalkthroughProgress } from "@/components/walkthrough-progress";
  * STANDARD at 2560×1440 still covers a 1920×1080 backing store without any
  * upscale, so mid-tier desktops lose nothing by taking it.
  */
-const UHD = { set: "d", count: 292, w: 3840, h: 2160 };
-const STANDARD = { set: "m", count: 292, w: 2560, h: 1440 };
+const UHD = { set: "d", count: 250, w: 3840, h: 2160 };
+const STANDARD = { set: "m", count: 250, w: 2560, h: 1440 };
 
 const PAPER = "#F4EFE8";
 
@@ -40,13 +40,13 @@ const frameUrl = (set: string, i: number) =>
   `/walkthrough/${set}/frame-${String(i + 1).padStart(4, "0")}.webp`;
 
 /** Frames shown by the reduced-motion / stacked fallback, one per beat. */
-const STILL_FRAMES = [0, 59, 129, 209, 284];
+const STILL_FRAMES = [4, 29, 109, 164, 239];
 
 /**
  * Pick the smallest set that covers this device's canvas backing store
  * without upscaling. Phones are capped at STANDARD regardless: a portrait
  * viewport covering landscape footage scales by height, so no set we ship
- * fully covers a 3x-DPI phone, and 292 decoded 4K bitmaps would get the tab
+ * fully covers a 3x-DPI phone, and 250 decoded 4K bitmaps would get the tab
  * killed long before the extra detail paid for itself.
  */
 function pickSet() {
@@ -87,7 +87,7 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
   const loadedRef = useRef<boolean[]>([]);
   const [loadProgress, setLoadProgress] = useState(0);
   const [ready, setReady] = useState(false);
-  // Both sets are 292 frames; kept in state so a differing set is handled.
+  // Both sets are 250 frames; kept in state so a differing set is handled.
   const [frameCount, setFrameCount] = useState(STANDARD.count);
 
   const { scrollYProgress } = useScroll({
@@ -95,36 +95,73 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
     offset: ["start start", "end end"],
   });
 
-  // Preload the whole set for the current breakpoint.
+  // Progressive preload.
+  //
+  // Blocking on the whole set stopped being viable once frames became real
+  // 4K (~275KB each): waiting for all of them is tens of seconds on an
+  // ordinary connection. Instead we unlock the scrub as soon as a prime
+  // batch covering the opening beat is in, then stream the remainder in
+  // document order behind it. drawFrame already falls back to the nearest
+  // loaded frame, so an un-arrived frame holds the previous one for a beat
+  // rather than showing a gap.
   useEffect(() => {
     if (!live) return;
     const { set, count } = pickSet();
     setFrameCount(count);
 
-    let done = 0;
-    let cancelled = false;
-    const images: HTMLImageElement[] = [];
-    const loaded: boolean[] = new Array(count).fill(false);
+    const PRIME = Math.min(24, count); // enough for beat 1 before unlocking
 
-    for (let i = 0; i < count; i++) {
+    let done = 0;
+    let primed = 0;
+    let cancelled = false;
+    const images: HTMLImageElement[] = new Array(count);
+    const loaded: boolean[] = new Array(count).fill(false);
+    imagesRef.current = images;
+    loadedRef.current = loaded;
+
+    const request = (i: number, onSettle?: () => void) => {
       const img = new Image();
       const settle = (ok: boolean) => {
         if (cancelled) return;
         loaded[i] = ok;
         done++;
         setLoadProgress(done / count);
-        if (done === count) setReady(true);
+        onSettle?.();
       };
       img.onload = () => settle(true);
       img.onerror = () => settle(false);
       img.src = frameUrl(set, i);
-      images.push(img);
-    }
-    imagesRef.current = images;
-    loadedRef.current = loaded;
+      images[i] = img;
+    };
 
-    // Safety valve: on a slow connection go live anyway after 8s and let
-    // drawFrame fall back to the nearest loaded frame.
+    // Phase 1 — prime batch, in parallel. Unlock as soon as it lands.
+    for (let i = 0; i < PRIME; i++) {
+      request(i, () => {
+        primed++;
+        if (primed === PRIME) setReady(true);
+      });
+    }
+
+    // Phase 2 — the rest, throttled so it never starves phase 1 or the
+    // main thread. Kicks off immediately; scrubbing is already live.
+    let next = PRIME;
+    let inFlight = 0;
+    const REST_POOL = 6;
+    const pump = () => {
+      if (cancelled) return;
+      while (next < count && inFlight < REST_POOL) {
+        const i = next++;
+        inFlight++;
+        request(i, () => {
+          inFlight--;
+          pump();
+        });
+      }
+    };
+    pump();
+
+    // Backstop: if even the prime batch stalls, go live anyway and let
+    // drawFrame cope with whatever has arrived.
     const valve = window.setTimeout(() => {
       if (!cancelled) setReady(true);
     }, 8000);
@@ -210,7 +247,7 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
   return (
     <section ref={containerRef} aria-label="Walkthrough of a finished build" className="relative h-[350vh] md:h-[500vh]">
       {/* Preload hairline — bone on bone, top edge, no spinner. */}
-      {live && !ready && (
+      {live && loadProgress < 1 && (
         <div className="fixed inset-x-0 top-0 z-50 h-px bg-bone/60">
           <div
             className="h-full origin-left bg-ink/40 transition-transform duration-300 ease-out"
