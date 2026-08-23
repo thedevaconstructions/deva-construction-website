@@ -37,18 +37,25 @@ export function BgShader() {
         // Calm drift — visible, but not something that pulls the eye off copy.
         speed={0.3}
         count={5}
-        // The reference sky, lightened until body copy clears WCAG AA.
-        // Measured against --color-ink at the opacities this site actually
-        // uses: over the native #3876BA, ink/70 body text scores 2.66:1 and
-        // even full-strength headings only reach 3.72:1 — both below the 4.5
-        // needed. This background is fixed and viewport-height, so the
-        // deepest part of the sky sits exactly where copy scrolls past.
-        // #9CC2E3 is the deepest blue that still gets ink/70 to 4.70:1.
-        // The project cards keep the full-strength sky: nothing on them has
-        // to be read. See components/card-cloud.tsx.
+        // Full-strength reference sky, matching components/card-cloud.tsx.
+        //
+        // ACCESSIBILITY NOTE — this is a known, deliberate trade-off, not an
+        // oversight. Measured contrast of --color-ink over #3876BA at the
+        // opacities this site uses:
+        //     ink/100 headings  3.72:1
+        //     ink/75  body      2.85:1
+        //     ink/70  body      2.66:1
+        //     ink/60  meta      2.33:1
+        // WCAG AA wants 4.5:1 for normal text and 3.0:1 for large text, so
+        // body copy fails wherever it crosses the darker top of the sky —
+        // and this layer is fixed and viewport-height, so it does that on
+        // every page. A lighter variant (#9CC2E3 -> #D7E9F7) clears AA at
+        // 4.70:1 and was shipped first; the owner reviewed those numbers and
+        // chose the full reference sky anyway. Swap the two colours below to
+        // go back.
         cloudColor="#FFFFFF"
-        skyTopColor="#9CC2E3"
-        skyBottomColor="#D7E9F7"
+        skyTopColor="#3876BA"
+        skyBottomColor="#8CBFE8"
       />
     </div>
   );
