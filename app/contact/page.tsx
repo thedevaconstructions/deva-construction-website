@@ -12,7 +12,7 @@ export default function ContactPage() {
       <section>
         <div className="mx-auto max-w-5xl px-6 pb-16 pt-8 lg:px-10">
           <Reveal duration={500} y={12}>
-            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
               Say hello
             </p>
           </Reveal>
@@ -127,7 +127,7 @@ function Detail({ label, href, value }: { label: string; href: string; value: st
   return (
     <div>
       <Label>{label}</Label>
-      <a href={href} className="mt-2 block font-serif text-2xl text-ink hover:text-accent">
+      <a href={href} className="mt-2 block font-serif text-2xl text-ink hover:text-accent-deep">
         {value}
       </a>
     </div>

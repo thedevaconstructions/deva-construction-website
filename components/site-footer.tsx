@@ -50,7 +50,7 @@ export function SiteFooter() {
 
         {COLS.map((col) => (
           <div key={col.title}>
-            <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-accent">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
               {col.title}
             </div>
             <ul className="mt-4 space-y-3 text-sm">

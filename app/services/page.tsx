@@ -39,7 +39,7 @@ export default function ServicesPage() {
       <section>
         <div className="mx-auto max-w-7xl px-6 pb-16 pt-8 lg:px-10">
           <Reveal duration={500} y={12}>
-            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
               What we do
             </p>
           </Reveal>
@@ -56,7 +56,7 @@ export default function ServicesPage() {
           {SERVICES.map((s, i) => (
             <Reveal key={s.n} delay={i * 80} duration={800}>
               <article className="grid gap-8 py-14 md:grid-cols-[120px_1fr] md:gap-14">
-                <div className="font-serif text-4xl italic text-accent/70">{s.n}</div>
+                <div className="font-serif text-4xl italic text-accent-deep/70">{s.n}</div>
                 <div>
                   <h2 className="font-serif text-3xl tracking-tight text-ink md:text-5xl">
                     {s.title}

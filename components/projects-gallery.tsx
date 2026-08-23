@@ -79,7 +79,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                   </div>
                 </div>
                 <div className="mt-5 flex items-baseline justify-between">
-                  <h2 className="font-serif text-xl text-ink transition group-hover:text-accent">
+                  <h2 className="font-serif text-xl text-ink transition group-hover:text-accent-deep">
                     {p.name}
                   </h2>
                   <span className="text-xs text-ink/60">{p.year}</span>

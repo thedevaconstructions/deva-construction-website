@@ -12,7 +12,7 @@
     monospace;
 
   /* Palette — "Blueprint & Cast Iron"
-     Warm bone paper, deep stone ink, safety-orange accent, burnished-bronze
+     Warm bone paper, deep stone ink, sky-blue accent, burnished-bronze
      luxury notes. Construction firm run like a design studio. */
   --color-paper: #F4EFE8;
   --color-paper-2: #EEE7DA;
@@ -22,7 +22,22 @@
   --color-steel: #3F3D3A;
   --color-line: #D6CFC2;
   --color-muted: #6E6558;
-  --color-accent: #EA580C;
+  /* Sky-palette accent, replacing the previous safety orange (#EA580C).
+     Two tokens because one blue cannot cover every role at WCAG AA:
+       --color-accent      #3F83BF — the palette blue as supplied. Used where
+                           contrast is not critical: the 6px eyebrow dot, the
+                           active-nav underline, the walkthrough progress rail,
+                           and the focus ring (3.52:1 on paper, clearing the
+                           3:1 non-text minimum).
+       --color-accent-deep #29557C — a darker shade of the same hue, for
+                           anything that must be READ. #3F83BF as 11px eyebrow
+                           text is only 3.52:1 and as a button fill only
+                           4.03:1 with a white label; both miss the 4.5 small
+                           text needs. #29557C measures 6.82:1 on paper,
+                           6.35:1 on paper-2, 4.60:1 on the #94CEF2 CTA card,
+                           and 7.81:1 behind a white button label. */
+  --color-accent: #3F83BF;
+  --color-accent-deep: #29557C;
   --color-bronze: #A16207;
 
   /* Legacy tokens kept so any lingering class doesn't shatter — brand alias. */

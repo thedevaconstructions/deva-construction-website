@@ -147,7 +147,7 @@ export const BEATS: BeatDef[] = [
         <div aria-hidden className="absolute -inset-8 -z-10" style={glow} />
         <h2 className="font-serif text-4xl leading-[1.05] tracking-tight text-ink/[.92] md:text-6xl">
           Have a plot, a sketch, or{" "}
-          <span className="italic text-accent">just an idea?</span>
+          <span className="italic text-accent-deep">just an idea?</span>
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-ink/70 md:text-base">
           We reply to every enquiry inside 24 hours with a first-read from the
@@ -160,7 +160,7 @@ export const BEATS: BeatDef[] = [
         >
           <Link
             href="/contact"
-            className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:opacity-90"
+            className="group inline-flex items-center gap-2 rounded-full bg-accent-deep px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:opacity-90"
           >
             Start a project
             <span

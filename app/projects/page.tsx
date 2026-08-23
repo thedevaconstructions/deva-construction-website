@@ -22,7 +22,7 @@ export default function ProjectsPage() {
       <section>
         <div className="mx-auto max-w-7xl px-6 pb-16 pt-8 lg:px-10">
           <Reveal duration={500} y={12}>
-            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
               Selected work · 2018 → 2026
             </p>
           </Reveal>

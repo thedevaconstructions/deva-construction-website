@@ -12,13 +12,13 @@
 export function BgAurora({ className }: { className?: string }) {
   return (
     <div className={`absolute inset-0 overflow-hidden bg-paper ${className ?? ""}`}>
-      {/* Aurora layer 1 — bright coral/orange sweep */}
+      {/* Aurora layer 1 — bright sky-blue sweep */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 aurora-layer-1"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(100deg, transparent 0%, rgba(234,88,12,0.7) 8%, transparent 22%, rgba(161,98,7,0.55) 36%, transparent 52%, rgba(234,88,12,0.5) 66%, transparent 82%)",
+            "repeating-linear-gradient(100deg, transparent 0%, rgba(63,131,191,0.7) 8%, transparent 22%, rgba(161,98,7,0.55) 36%, transparent 52%, rgba(63,131,191,0.5) 66%, transparent 82%)",
           filter: "blur(70px)",
           opacity: 0.9,
         }}

@@ -62,7 +62,7 @@ export default function HomePage() {
         <Reveal duration={800}>
           <div className="flex items-end justify-between border-b border-line/70 pb-6">
             <div>
-              <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+              <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
                 Selected work
               </p>
               <h2 className="mt-3 font-serif text-4xl leading-tight tracking-tight text-ink md:text-5xl">
@@ -99,7 +99,7 @@ export default function HomePage() {
           <div className="grid gap-12 md:grid-cols-[1fr_2fr]">
             <Reveal duration={800}>
               <div>
-                <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+                <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
                   Expertise
                 </p>
                 <h2 className="mt-3 max-w-md font-serif text-4xl leading-tight tracking-tight text-ink md:text-5xl">
@@ -116,7 +116,7 @@ export default function HomePage() {
               {SERVICES.map((s, i) => (
                 <Reveal key={s.title} delay={i * 100} duration={700}>
                   <div className="group">
-                    <div className="font-mono text-[11px] font-semibold tracking-[0.24em] text-accent">
+                    <div className="font-mono text-[11px] font-semibold tracking-[0.24em] text-accent-deep">
                       {s.n}
                     </div>
                     <dt className="mt-2 font-serif text-2xl text-ink transition group-hover:text-bronze">
@@ -134,7 +134,7 @@ export default function HomePage() {
       {/* CLIENT NOTE */}
       <section className="mx-auto max-w-4xl px-6 py-32 text-center lg:px-10">
         <Reveal duration={900}>
-          <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+          <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
             Client note
           </p>
           <blockquote className="mt-8 font-serif text-3xl leading-tight tracking-tight text-ink md:text-[42px]">
@@ -155,11 +155,9 @@ export default function HomePage() {
               only 1.17:1 separation (the card dissolves into the background)
               and nothing reads on it — near-white body text 2.71:1, ink
               4.34:1, both under AA. #94CEF2 separates at 2.77:1 and carries
-              ink text at 10.3:1. Safety orange stays on the primary button:
-              it is the brand's one accent, and on blue it is complementary,
-              so the CTA remains the loudest thing here. Orange as *text* on
-              this card would be 2.9:1, so the italic accent word switches to
-              deep blue instead. */}
+              ink text at 10.3:1. Accent text and the primary button both use
+              --color-accent-deep (#29557C), which measures 4.60:1 on this
+              card. */}
           <div className="relative overflow-hidden rounded-[36px] bg-[#94CEF2] px-8 py-20 text-ink md:px-16 md:py-28">
             <div
               aria-hidden
@@ -168,13 +166,13 @@ export default function HomePage() {
               Deva
             </div>
             <div className="relative max-w-2xl">
-              <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-[#215076]">
+              <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
                 Let&apos;s build
               </p>
               <h2 className="mt-4 font-serif text-4xl leading-tight tracking-tight md:text-6xl">
                 Have a plot,
                 <br />a sketch,
-                <br />or <span className="italic text-[#2B6394]">just an idea?</span>
+                <br />or <span className="italic text-accent-deep">just an idea?</span>
               </h2>
               <p className="mt-6 max-w-lg text-ink/80">
                 We reply to every enquiry inside 24 hours with a first-read from our team and a
@@ -184,7 +182,7 @@ export default function HomePage() {
                 <Magnetic>
                   <Link
                     href="/contact"
-                    className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:opacity-90"
+                    className="group inline-flex items-center gap-2 rounded-full bg-accent-deep px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:opacity-90"
                   >
                     Start a conversation
                     <span
@@ -248,7 +246,7 @@ function ProjectCard({
           </div>
         </div>
         <div className="mt-5 flex items-baseline justify-between">
-          <h3 className="font-serif text-xl leading-snug text-ink transition group-hover:text-accent">
+          <h3 className="font-serif text-xl leading-snug text-ink transition group-hover:text-accent-deep">
             {project.name}
           </h3>
           <span className="font-mono text-xs text-ink/60">{project.year}</span>

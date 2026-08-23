@@ -32,7 +32,7 @@ export default function AuroraPreviewPage() {
               segments={[
                 <span key="design">Design</span>,
                 <span key="built">
-                  &amp; <span className="italic text-accent">Built</span>
+                  &amp; <span className="italic text-accent-deep">Built</span>
                 </span>,
                 <span key="elegance">to elegance.</span>,
               ]}

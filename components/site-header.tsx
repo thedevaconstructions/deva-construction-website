@@ -163,7 +163,7 @@ export function SiteHeader() {
                     >
                       <span
                         className={`font-serif text-4xl ${
-                          active ? "text-accent italic" : "text-paper"
+                          active ? "text-accent-deep italic" : "text-paper"
                         }`}
                       >
                         {item.label}
@@ -181,7 +181,7 @@ export function SiteHeader() {
           <div className="mt-auto pt-10">
             <Link
               href="/contact"
-              className="inline-flex w-full items-center justify-center rounded-full bg-accent px-6 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:opacity-90"
+              className="inline-flex w-full items-center justify-center rounded-full bg-accent-deep px-6 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:opacity-90"
             >
               Start a project →
             </Link>

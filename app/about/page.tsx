@@ -28,7 +28,7 @@ export default function AboutPage() {
       <section>
         <div className="mx-auto max-w-5xl px-6 pb-16 pt-8 lg:px-10">
           <Reveal duration={500} y={12}>
-            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+            <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
               About Deva Construction
             </p>
           </Reveal>
@@ -52,7 +52,7 @@ export default function AboutPage() {
         <div className="grid gap-16 md:grid-cols-2">
           <Reveal duration={800}>
             <div>
-              <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+              <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
                 How we work
               </p>
               <h2 className="mt-4 font-serif text-4xl leading-tight tracking-tight text-ink md:text-5xl">

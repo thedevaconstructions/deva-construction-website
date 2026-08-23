@@ -5,7 +5,7 @@ export const metadata = { title: "Page not found" };
 export default function NotFound() {
   return (
     <section className="mx-auto flex min-h-[70vh] max-w-2xl flex-col items-center justify-center px-6 text-center lg:px-10">
-      <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+      <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
         Error 404
       </p>
       <h1 className="mt-6 font-serif text-5xl leading-tight tracking-tight text-ink md:text-7xl">
