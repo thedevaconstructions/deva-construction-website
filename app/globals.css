@@ -43,13 +43,18 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-paper);
-  /* Subtle blueprint grid — slightly bolder than before to read as "site plan". */
-  background-image:
-    linear-gradient(to right, rgba(28, 25, 23, 0.055) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(28, 25, 23, 0.055) 1px, transparent 1px);
-  background-size: 56px 56px;
-  background-position: -1px -1px;
+  /* Deliberately NO background here, and no bg-* class on <body> in the root
+     layout. The page background is a WebGL layer (components/bg-shader.tsx)
+     mounted at z-index -10. In the root stacking context the paint order is:
+     html's background, then negative z-index descendants, then the in-flow
+     backgrounds of block children — so any background on <body> paints OVER
+     the shader and hides it completely. The ground colour lives on `html`
+     above, which paints beneath the shader and remains the whole background
+     if WebGL is unavailable.
+
+     What used to be here was a blueprint grid: a hairline gradient tiled on a
+     fixed pixel cell — a generic template signature rather than something
+     designed for this firm. */
 }
 
 .font-serif {

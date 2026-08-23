@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { MotionProvider } from "@/components/motion-provider";
+import { BgShader } from "@/components/bg-shader";
 import { MainShell } from "@/components/main-shell";
 
 const fraunces = Fraunces({
@@ -61,7 +62,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="min-h-screen bg-paper text-ink">
+      <body className="min-h-screen text-ink">
+        {/* Fixed WebGL background, behind everything. Mounted once here so the
+            whole site shares one GL context. */}
+        <BgShader />
         <MotionProvider>
           <SiteHeader />
           <MainShell>{children}</MainShell>
