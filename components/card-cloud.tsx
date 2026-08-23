@@ -60,7 +60,7 @@ export function CardCloud({
     <div
       ref={ref}
       aria-hidden
-      className={`absolute inset-0 bg-gradient-to-br from-paper-2 via-bone to-line/60 ${className ?? ""}`}
+      className={`absolute inset-0 bg-gradient-to-b from-[#3876BA] to-[#8CBFE8] ${className ?? ""}`}
     >
       {active ? (
         <CloudShader
@@ -68,11 +68,11 @@ export function CardCloud({
           speed={speed}
           count={count}
           timeOffset={offset}
-          // Warmer and a touch more contrast than the page background: this
-          // is a card people look at, not atmosphere behind body copy.
-          cloudColor="#FFFDF8"
-          skyTopColor="#E4D9C4"
-          skyBottomColor="#F2ECE1"
+          // Same native sky as the page background, so cards read as windows
+          // onto it rather than as a different material.
+          cloudColor="#FFFFFF"
+          skyTopColor="#3876BA"
+          skyBottomColor="#8CBFE8"
         />
       ) : null}
     </div>
