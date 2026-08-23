@@ -50,10 +50,10 @@ export function ContactForm() {
           Enquiry sent
         </p>
         <p className="mt-4 font-serif text-2xl leading-snug text-ink">
-          {state.message ?? "Thanks â that's with us."}
+          {state.message ?? "Thanks — that's with us."}
         </p>
         <p className="mt-4 text-sm text-ink/70">
-          If it&apos;s urgent, WhatsApp is usually fastest â{" "}
+          If it&apos;s urgent, WhatsApp is usually fastest —{" "}
           {/* TODO(real-details): placeholder number. */}
           <a href="tel:+919999999999" className="underline underline-offset-4 hover:text-accent-deep">
             +91 99999 99999
@@ -120,7 +120,7 @@ export function ContactForm() {
         <FieldError id="message-error" error={state.fieldErrors?.message} />
       </label>
 
-      {/* Honeypot â hidden from people, not from naive bots. */}
+      {/* Honeypot — hidden from people, not from naive bots. */}
       <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">
         <label>
           Company
@@ -145,8 +145,8 @@ function SubmitButton() {
       disabled={pending}
       className="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {pending ? "Sendingâ¦" : "Send enquiry"}
-      {!pending && <span aria-hidden>â</span>}
+      {pending ? "Sending…" : "Send enquiry"}
+      {!pending && <span aria-hidden>→</span>}
     </button>
   );
 }
