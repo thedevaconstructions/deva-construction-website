@@ -4,6 +4,7 @@ import { Reveal } from "@/components/reveal";
 import { Magnetic } from "@/components/magnetic";
 import { TiltCard } from "@/components/tilt-card";
 import { Marquee } from "@/components/marquee";
+import { CardCloud } from "@/components/card-cloud";
 import { Walkthrough } from "@/components/walkthrough";
 
 const FEATURED_PROJECTS = [
@@ -86,7 +87,7 @@ export default function HomePage() {
         <div className="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-3">
           {FEATURED_PROJECTS.map((p, i) => (
             <Reveal key={p.slug} delay={i * 120} duration={800}>
-              <ProjectCard project={p} />
+              <ProjectCard project={p} index={i} />
             </Reveal>
           ))}
         </div>
@@ -212,8 +213,10 @@ function Stat({ n, label }: { n: React.ReactNode; label: string }) {
 
 function ProjectCard({
   project,
+  index,
 }: {
   project: { slug: string; name: string; location: string; year: string; kind: string };
+  index: number;
 }) {
   const initials = project.name
     .split(" ")
@@ -224,8 +227,11 @@ function ProjectCard({
     <TiltCard className="group block">
       <Link href={`/projects/${project.slug}`} className="block">
         <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] bg-bone">
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-paper-2 via-bone to-line/60 transition duration-700 group-hover:scale-[1.04]">
-            <span className="font-serif text-7xl italic text-ink/15">{initials}</span>
+          <div className="absolute inset-0 transition duration-700 group-hover:scale-[1.04]">
+            <CardCloud index={index} />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-serif text-7xl italic text-ink/25">{initials}</span>
+            </div>
           </div>
           <div className="absolute bottom-3 left-3 rounded-full bg-paper/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink">
             {project.kind}

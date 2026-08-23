@@ -33,6 +33,12 @@ export type CloudShaderProps = {
   skyTopColor?: string;
   /** Sky color at the bottom (hex or rgb string). */
   skyBottomColor?: string;
+  /**
+   * Seconds added to the shader clock. Instances share one time origin, so
+   * without this every CloudShader on a page renders an identical sky —
+   * obvious when several sit side by side. Give each a different offset.
+   */
+  timeOffset?: number;
 };
 
 const VERT = `
@@ -248,6 +254,7 @@ export const CloudShader = ({
   cloudColor = "#fbf8f2",
   skyTopColor = "#3876ba",
   skyBottomColor = "#8cbfe8",
+  timeOffset = 0,
 }: CloudShaderProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const paramsRef = useRef({
@@ -256,6 +263,7 @@ export const CloudShader = ({
     cloudColor,
     skyTopColor,
     skyBottomColor,
+    timeOffset,
   });
 
   paramsRef.current = {
@@ -264,6 +272,7 @@ export const CloudShader = ({
     cloudColor,
     skyTopColor,
     skyBottomColor,
+    timeOffset,
   };
 
   useEffect(() => {
@@ -337,7 +346,8 @@ export const CloudShader = ({
     const draw = (now: number) => {
       if (!running) return;
       const p = paramsRef.current;
-      const elapsed = reduceMotion ? 0 : ((now - start) / 1000) * p.speed;
+      const elapsed =
+        (reduceMotion ? 0 : ((now - start) / 1000) * p.speed) + p.timeOffset;
       const cloud = parseHex(p.cloudColor);
       const skyTop = parseHex(p.skyTopColor);
       const skyBottom = parseHex(p.skyBottomColor);

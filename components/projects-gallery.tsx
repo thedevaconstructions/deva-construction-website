@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/reveal";
+import { CardCloud } from "@/components/card-cloud";
 
 type Kind = "Residential" | "Commercial";
 type Project = {
@@ -67,8 +68,11 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
             <Reveal key={p.slug} delay={i * 80} duration={700}>
               <Link href={`/projects/${p.slug}`} className="group block">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] bg-bone">
-                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-bone via-paper-2 to-line/60 transition duration-700 group-hover:scale-[1.04]">
-                    <span className="font-serif text-7xl italic text-ink/15">{initials}</span>
+                  <div className="absolute inset-0 transition duration-700 group-hover:scale-[1.04]">
+                    <CardCloud index={i} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="font-serif text-7xl italic text-ink/25">{initials}</span>
+                    </div>
                   </div>
                   <div className="absolute bottom-3 left-3 rounded-full bg-paper/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink">
                     {p.kind}
