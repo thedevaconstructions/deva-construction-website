@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/reveal";
+import { ContactForm } from "@/components/contact-form";
 
 export const metadata = {
   title: "Contact",
@@ -38,6 +39,9 @@ export default function ContactPage() {
               href="mailto:hello@devaconstructions.in"
               value="hello@devaconstructions.in"
             />
+            {/* TODO(real-details): placeholder number — replace with the real
+                phone/WhatsApp before this gets any traffic. Also appears in
+                components/contact-form.tsx, site-header.tsx and site-footer.tsx. */}
             <Detail
               label="Phone / WhatsApp"
               href="tel:+919999999999"
@@ -45,6 +49,7 @@ export default function ContactPage() {
             />
             <div>
               <Label>Studio</Label>
+              {/* TODO(real-details): placeholder address / postcode. */}
               <address className="mt-2 not-italic text-ink/80">
                 Deva Construction
                 <br />
@@ -63,52 +68,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <form
-            action="mailto:hello@devaconstructions.in"
-            method="post"
-            encType="text/plain"
-            className="space-y-6 rounded-[28px] border border-line/70 bg-paper/70 p-8 md:p-10"
-          >
-            <div className="grid gap-6 sm:grid-cols-2">
-              <Field label="Your name" name="name" required />
-              <Field label="Email" name="email" type="email" required />
-            </div>
-            <Field label="Phone (optional)" name="phone" />
-            <label className="block text-sm">
-              <Label>Project type</Label>
-              <select
-                name="type"
-                className="mt-2 w-full border-b border-ink/25 bg-transparent py-2 text-ink outline-none transition focus:border-ink"
-                defaultValue="residential"
-              >
-                <option value="residential">Residential build</option>
-                <option value="commercial">Commercial / industrial</option>
-                <option value="renovation">Renovation / interiors</option>
-                <option value="pm">Project management only</option>
-                <option value="other">Something else</option>
-              </select>
-            </label>
-            <label className="block text-sm">
-              <Label>Tell us about the project</Label>
-              <textarea
-                name="message"
-                rows={5}
-                required
-                placeholder="Plot size, location, timelines, or anything you already know."
-                className="mt-2 w-full border-b border-ink/25 bg-transparent py-2 text-ink outline-none transition focus:border-ink"
-              />
-            </label>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2"
-            >
-              Send enquiry <span aria-hidden>→</span>
-            </button>
-            <p className="text-xs text-ink/60">
-              Placeholder form — it opens your email app. We&apos;ll swap it for a real server-backed
-              form (Resend / Formspree) before launch.
-            </p>
-          </form>
+          <ContactForm />
         </div>
       </section>
     </>
@@ -131,29 +91,5 @@ function Detail({ label, href, value }: { label: string; href: string; value: st
         {value}
       </a>
     </div>
-  );
-}
-
-function Field({
-  label,
-  name,
-  type = "text",
-  required,
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <label className="block text-sm">
-      <Label>{label}</Label>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        className="mt-2 w-full border-b border-ink/25 bg-transparent py-2 text-ink outline-none transition focus:border-ink"
-      />
-    </label>
   );
 }
