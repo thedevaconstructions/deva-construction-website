@@ -35,8 +35,8 @@ export default function ContactPage() {
           <div className="space-y-8 text-sm">
             <Detail
               label="Email"
-              href="mailto:hello@devaconstruction.in"
-              value="hello@devaconstruction.in"
+              href="mailto:hello@devaconstructions.in"
+              value="hello@devaconstructions.in"
             />
             <Detail
               label="Phone / WhatsApp"
@@ -64,7 +64,7 @@ export default function ContactPage() {
           </div>
 
           <form
-            action="mailto:hello@devaconstruction.in"
+            action="mailto:hello@devaconstructions.in"
             method="post"
             encType="text/plain"
             className="space-y-6 rounded-[28px] border border-line/70 bg-paper/70 p-8 md:p-10"

@@ -134,16 +134,13 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
       images[i] = img;
     };
 
-    // Phase 1 — prime batch, in parallel. Unlock as soon as it lands.
-    for (let i = 0; i < PRIME; i++) {
-      request(i, () => {
-        primed++;
-        if (primed === PRIME) setReady(true);
-      });
-    }
-
-    // Phase 2 — the rest, throttled so it never starves phase 1 or the
-    // main thread. Kicks off immediately; scrubbing is already live.
+    // Phase 2 — everything after the prime batch, drip-fed through a small
+    // pool. Declared first but NOT started until phase 1 finishes: kicking
+    // it off immediately puts 250 requests on the wire at once, the prime
+    // batch gets an equal slice of a shared pipe instead of all of it, and
+    // the unlock ends up waiting on most of the set anyway (measured on
+    // production: >15s to scrubbable). Serialising the two phases is what
+    // makes the prime batch actually prime.
     let next = PRIME;
     let inFlight = 0;
     const REST_POOL = 6;
@@ -158,12 +155,29 @@ function ScrubWalkthrough({ live }: { live: boolean }) {
         });
       }
     };
-    pump();
+
+    // Phase 1 — prime batch, all in parallel, nothing else competing.
+    // Unlock the scrub the moment it lands, then release phase 2.
+    for (let i = 0; i < PRIME; i++) {
+      request(i, () => {
+        primed++;
+        if (primed === PRIME) {
+          setReady(true);
+          pump();
+        }
+      });
+    }
 
     // Backstop: if even the prime batch stalls, go live anyway and let
-    // drawFrame cope with whatever has arrived.
+    // drawFrame cope with whatever has arrived. This must release phase 2
+    // as well — phase 2 is now gated on the prime batch completing, so a
+    // stalled prime would otherwise mean the rest of the set never loads.
+    // pump() is idempotent for an already-running pool (it only fills up to
+    // REST_POOL), so calling it here and from phase 1 is safe.
     const valve = window.setTimeout(() => {
-      if (!cancelled) setReady(true);
+      if (cancelled) return;
+      setReady(true);
+      pump();
     }, 8000);
 
     return () => {

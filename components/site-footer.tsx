@@ -13,10 +13,10 @@ const COLS = [
   {
     title: "Clients",
     links: [
-      { href: "https://app.devaconstruction.in", label: "Sign in" },
-      { href: "https://app.devaconstruction.in/privacy", label: "Privacy policy" },
-      { href: "https://app.devaconstruction.in/delete-account", label: "Delete account" },
-      { href: "https://app.devaconstruction.in/download", label: "Android app" },
+      { href: "https://app.devaconstructions.in", label: "Sign in" },
+      { href: "https://app.devaconstructions.in/privacy", label: "Privacy policy" },
+      { href: "https://app.devaconstructions.in/delete-account", label: "Delete account" },
+      { href: "https://app.devaconstructions.in/download", label: "Android app" },
     ],
   },
 ];
@@ -38,8 +38,8 @@ export function SiteFooter() {
             walk-through.
           </p>
           <div className="mt-8 space-y-2 text-sm text-paper/85">
-            <a href="mailto:hello@devaconstruction.in" className="block hover:text-paper hover:underline">
-              hello@devaconstruction.in
+            <a href="mailto:hello@devaconstructions.in" className="block hover:text-paper hover:underline">
+              hello@devaconstructions.in
             </a>
             <a href="tel:+919999999999" className="block hover:text-paper hover:underline">
               +91 99999 99999
