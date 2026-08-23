@@ -150,23 +150,33 @@ export default function HomePage() {
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-16 lg:px-10">
         <Reveal duration={900} y={40}>
-          <div className="relative overflow-hidden rounded-[36px] bg-ink px-8 py-20 text-paper md:px-16 md:py-28">
+          {/* Sky palette. Card fill is the palette's light blue rather than its
+              deep #3F83BF: against the #3876BA sky behind it, deep blue gives
+              only 1.17:1 separation (the card dissolves into the background)
+              and nothing reads on it — near-white body text 2.71:1, ink
+              4.34:1, both under AA. #94CEF2 separates at 2.77:1 and carries
+              ink text at 10.3:1. Safety orange stays on the primary button:
+              it is the brand's one accent, and on blue it is complementary,
+              so the CTA remains the loudest thing here. Orange as *text* on
+              this card would be 2.9:1, so the italic accent word switches to
+              deep blue instead. */}
+          <div className="relative overflow-hidden rounded-[36px] bg-[#94CEF2] px-8 py-20 text-ink md:px-16 md:py-28">
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-16 -bottom-16 font-serif text-[240px] leading-none text-paper/[0.06] md:text-[340px]"
+              className="pointer-events-none absolute -right-16 -bottom-16 font-serif text-[240px] leading-none text-[#3F83BF]/25 md:text-[340px]"
             >
               Deva
             </div>
             <div className="relative max-w-2xl">
-              <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
+              <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-[#215076]">
                 Let&apos;s build
               </p>
               <h2 className="mt-4 font-serif text-4xl leading-tight tracking-tight md:text-6xl">
                 Have a plot,
                 <br />a sketch,
-                <br />or <span className="italic text-accent">just an idea?</span>
+                <br />or <span className="italic text-[#2B6394]">just an idea?</span>
               </h2>
-              <p className="mt-6 max-w-lg text-paper/75">
+              <p className="mt-6 max-w-lg text-ink/80">
                 We reply to every enquiry inside 24 hours with a first-read from our team and a
                 proposed next step.
               </p>
@@ -187,7 +197,7 @@ export default function HomePage() {
                 </Magnetic>
                 <a
                   href="tel:+919999999999"
-                  className="inline-flex items-center rounded-full border border-paper/25 px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-paper/10"
+                  className="inline-flex items-center rounded-full border border-ink/30 px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:bg-ink/10"
                 >
                   +91 99999 99999
                 </a>
