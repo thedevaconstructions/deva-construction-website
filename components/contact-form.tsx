@@ -1,50 +1,154 @@
 "use client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
-import { sendEnquiry, type EnquiryState } from "@/app/contact/actions";
+import { useState } from "react";
 
 /**
  * Enquiry form.
  *
- * Notes on choices here:
- *  - Submits through a server action, not a mailto POST. The old form warned
- *    "this form is not secure" and dropped submissions in several browsers.
- *  - The submit button disables itself while pending, so a double-click can't
- *    send two enquiries.
- *  - Focus styling is explicit. The previous fields used `outline-none` with
- *    only a border-colour change on focus, which is a very weak keyboard
- *    indicator; these use a visible ring.
- *  - Errors are rendered next to the field and wired up with aria-invalid and
- *    aria-describedby so screen readers announce them.
+ * Submits to Web3Forms FROM THE BROWSER. That is not a shortcut — Web3Forms'
+ * free tier rejects server-to-server calls outright:
+ *
+ *   403 "This method is not allowed. Use our API in client side or contact
+ *        support with server IP address (Pro plan is required)"
+ *
+ * An earlier version posted from a Next server action to keep the key hidden,
+ * and every submission failed with the above. Client-side is the supported
+ * path on this plan, which is why the access key is a NEXT_PUBLIC_* var.
+ *
+ * On the key being public: Web3Forms is designed this way — their own docs put
+ * it in a plain hidden input. It is a routing token, not a credential; it can
+ * only cause mail to be sent TO the address that owns it. The honeypot below
+ * plus their spam filtering are the mitigations. If it ever gets abused,
+ * regenerate it at web3forms.com and update the env var — no code change.
+ *
+ * Replaces a <form action="mailto:…" method="post">, which made browsers warn
+ * "this form is not secure" and silently dropped submissions in several of
+ * them.
  */
 
-const initialState: EnquiryState = { status: "idle" };
+const ENDPOINT = "https://api.web3forms.com/submit";
+
+const PROJECT_TYPES: Record<string, string> = {
+  residential: "Residential build",
+  commercial: "Commercial / industrial",
+  renovation: "Renovation / interiors",
+  pm: "Project management only",
+  other: "Something else",
+};
+
+type Status = "idle" | "sending" | "ok" | "error";
 
 const fieldBase =
   "mt-2 w-full border-b border-ink/25 bg-transparent py-2 text-ink transition " +
   "focus:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 " +
   "focus-visible:outline-accent";
 
-export function ContactForm() {
-  const [state, formAction] = useActionState(sendEnquiry, initialState);
+/** Loose on purpose: the only real test of an address is sending to it. */
+const looksLikeEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-  if (state.status === "ok") {
+export function ContactForm() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [topError, setTopError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (status === "sending") return; // belt and braces against double submit
+
+    const fd = new FormData(e.currentTarget);
+    const val = (k: string) => String(fd.get(k) ?? "").trim();
+
+    const name = val("name");
+    const email = val("email");
+    const phone = val("phone");
+    const type = val("type");
+    const message = val("message");
+
+    // Honeypot: hidden from people, tempting to naive bots. Pretend success so
+    // the bot has no signal to retry, and send nothing.
+    if (val("company")) {
+      setStatus("ok");
+      return;
+    }
+
+    const next: Record<string, string> = {};
+    if (!name) next.name = "Please tell us your name.";
+    if (!email) next.email = "We need an email to reply to.";
+    else if (!looksLikeEmail(email)) next.email = "That doesn't look like an email address.";
+    if (!message) next.message = "Tell us a little about the project.";
+    else if (message.length < 10)
+      next.message = "A sentence or two would help us give a useful first read.";
+
+    if (Object.keys(next).length) {
+      setErrors(next);
+      setTopError("Please check the fields below.");
+      setStatus("error");
+      return;
+    }
+
+    setErrors({});
+    setTopError(null);
+    setStatus("sending");
+
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+    if (!accessKey) {
+      // Our misconfiguration, not the visitor's problem — give them a way out.
+      console.error("[contact] NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is not set.");
+      setTopError(
+        "Something went wrong on our end. Please email hello@devaconstructions.in and we'll pick it up straight away."
+      );
+      setStatus("error");
+      return;
+    }
+
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: accessKey,
+          subject: `New enquiry from ${name} — ${PROJECT_TYPES[type] ?? "Enquiry"}`,
+          from_name: "Deva Construction website",
+          name,
+          email,
+          phone: phone || "Not given",
+          project_type: PROJECT_TYPES[type] ?? type,
+          message,
+        }),
+      });
+      const data = (await res.json().catch(() => null)) as { success?: boolean } | null;
+
+      if (!res.ok || !data?.success) {
+        console.error("[contact] Web3Forms rejected the submission", res.status, data);
+        setTopError(
+          "We couldn't send that just now. Please email hello@devaconstructions.in and we'll pick it up straight away."
+        );
+        setStatus("error");
+        return;
+      }
+      setStatus("ok");
+    } catch (err) {
+      console.error("[contact] Web3Forms request failed", err);
+      setTopError(
+        "We couldn't reach our mail service. Please email hello@devaconstructions.in and we'll pick it up straight away."
+      );
+      setStatus("error");
+    }
+  }
+
+  if (status === "ok") {
     return (
-      <div
-        role="status"
-        className="rounded-[28px] border border-line/70 bg-paper/70 p-8 md:p-10"
-      >
+      <div role="status" className="rounded-[28px] border border-line/70 bg-paper/70 p-8 md:p-10">
         <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
           Enquiry sent
         </p>
-        <p className="mt-4 font-serif text-2xl leading-snug text-ink">{state.message}</p>
+        <p className="mt-4 font-serif text-2xl leading-snug text-ink">
+          Thanks — that&apos;s with us. We reply to every enquiry inside 24 hours.
+        </p>
         <p className="mt-4 text-sm text-ink/70">
-          If it's urgent, WhatsApp is usually fastest —{" "}
-          <a
-            href="tel:+919999999999"
-            className="underline underline-offset-4 hover:text-accent-deep"
-          >
+          If it&apos;s urgent, WhatsApp is usually fastest —{" "}
+          {/* TODO(real-details): placeholder number. */}
+          <a href="tel:+919999999999" className="underline underline-offset-4 hover:text-accent-deep">
             +91 99999 99999
           </a>
           .
@@ -53,29 +157,25 @@ export function ContactForm() {
     );
   }
 
+  const sending = status === "sending";
+
   return (
     <form
-      action={formAction}
+      onSubmit={handleSubmit}
       noValidate
       className="space-y-6 rounded-[28px] border border-line/70 bg-paper/70 p-8 md:p-10"
     >
-      {state.status === "error" && state.message && (
+      {topError && (
         <p
           role="alert"
           className="rounded-2xl border border-ink/15 bg-ink/[0.04] px-4 py-3 text-sm text-ink"
         >
-          {state.message}
+          {topError}
         </p>
       )}
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field
-          label="Your name"
-          name="name"
-          autoComplete="name"
-          required
-          error={state.fieldErrors?.name}
-        />
+        <Field label="Your name" name="name" autoComplete="name" required error={errors.name} />
         <Field
           label="Email"
           name="email"
@@ -83,7 +183,7 @@ export function ContactForm() {
           autoComplete="email"
           inputMode="email"
           required
-          error={state.fieldErrors?.email}
+          error={errors.email}
         />
       </div>
 
@@ -93,17 +193,16 @@ export function ContactForm() {
         type="tel"
         autoComplete="tel"
         inputMode="tel"
-        error={state.fieldErrors?.phone}
       />
 
       <label className="block text-sm">
         <Label>Project type</Label>
         <select name="type" defaultValue="residential" className={fieldBase}>
-          <option value="residential">Residential build</option>
-          <option value="commercial">Commercial / industrial</option>
-          <option value="renovation">Renovation / interiors</option>
-          <option value="pm">Project management only</option>
-          <option value="other">Something else</option>
+          {Object.entries(PROJECT_TYPES).map(([v, l]) => (
+            <option key={v} value={v}>
+              {l}
+            </option>
+          ))}
         </select>
       </label>
 
@@ -114,16 +213,15 @@ export function ContactForm() {
         <textarea
           name="message"
           rows={5}
-          required
-          aria-invalid={state.fieldErrors?.message ? true : undefined}
-          aria-describedby={state.fieldErrors?.message ? "message-error" : undefined}
+          aria-invalid={errors.message ? true : undefined}
+          aria-describedby={errors.message ? "message-error" : undefined}
           placeholder="Plot size, location, timelines, or anything you already know."
           className={fieldBase}
         />
-        <FieldError id="message-error" error={state.fieldErrors?.message} />
+        <FieldError id="message-error" error={errors.message} />
       </label>
 
-      {/* Honeypot — hidden from people, tempting to naive bots. */}
+      {/* Honeypot — hidden from people, not from naive bots. */}
       <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">
         <label>
           Company
@@ -131,27 +229,19 @@ export function ContactForm() {
         </label>
       </div>
 
-      <SubmitButton />
+      <button
+        type="submit"
+        disabled={sending}
+        className="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {sending ? "Sending…" : "Send enquiry"}
+        {!sending && <span aria-hidden>→</span>}
+      </button>
 
       <p className="text-xs text-ink/60">
-        We reply inside 24 hours. Your details are used to answer this enquiry and
-        nothing else.
+        We reply inside 24 hours. Your details are used to answer this enquiry and nothing else.
       </p>
     </form>
-  );
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:bg-ink-2 disabled:cursor-not-allowed disabled:opacity-60"
-    >
-      {pending ? "Sending…" : "Send enquiry"}
-      {!pending && <span aria-hidden>→</span>}
-    </button>
   );
 }
 
@@ -206,7 +296,6 @@ function Field({
       <input
         name={name}
         type={type}
-        required={required}
         autoComplete={autoComplete}
         inputMode={inputMode}
         aria-invalid={error ? true : undefined}
