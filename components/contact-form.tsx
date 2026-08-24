@@ -50,19 +50,25 @@ export function ContactForm() {
   };
 
   /**
-   * Bring the result into view after submitting.
+   * Move focus and scroll to the result once the action settles.
    *
-   * Without this the outcome is invisible to most people who submit. To reach
-   * the button they have scrolled to the bottom of a ~700px form; on success
-   * that form is replaced by a ~250px panel, so the page shortens by roughly
-   * 450px and the panel ends up ABOVE the viewport — they are left looking at
-   * the footer, with no sign the enquiry went anywhere. Taller mobile layouts
-   * make the gap worse. The same applies to the validation banner, which
-   * renders at the top of the form, off-screen from the button.
+   * This is a general robustness measure, NOT a confirmed fix for the
+   * "thank you is not shown" report — I could not reproduce that. Measured on
+   * the live page at both 586px and 375px viewports, the success panel lands
+   * fully inside the viewport at the scroll position someone reaches the
+   * button from, so it should already be visible. Whatever that report was, it
+   * was something else.
    *
-   * Focus moves too, not just scroll: it puts keyboard users at the result
-   * instead of back at the top of the document, and gives screen readers a
-   * landing point beyond the role=status / role=alert announcement.
+   * What this does address is real but narrower: the result is ~600px up the
+   * page from the top of the document, so anything that resets scroll on
+   * submit (a non-JS form POST, which useActionState still supports) leaves
+   * the visitor at the hero with the panel out of sight. Focus moves as well
+   * as scroll so keyboard users land on the result instead of the top of the
+   * document, and screen reader users get a landing point beyond the
+   * role=status / role=alert announcement.
+   *
+   * Note the effect cannot help in the no-JS case it partly targets — no JS
+   * means no effect. It covers slow hydration, not its absence.
    */
   useEffect(() => {
     if (state.status === "idle") return;
