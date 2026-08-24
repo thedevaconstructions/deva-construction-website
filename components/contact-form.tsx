@@ -50,7 +50,8 @@ export function ContactForm() {
           Enquiry sent
         </p>
         <p className="mt-4 font-serif text-2xl leading-snug text-ink">
-          {state.message ?? "Thanks — that's with us."}
+          {state.message ??
+            "Thanks — we have your enquiry. We'll contact you as soon as possible."}
         </p>
         <p className="mt-4 text-sm text-ink/70">
           If it&apos;s urgent, WhatsApp is usually fastest —{" "}

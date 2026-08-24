@@ -39,6 +39,17 @@ const PROJECT_TYPES: Record<string, string> = {
 
 const FALLBACK_EMAIL = "hello@devaconstructions.in";
 
+/**
+ * Shown to the visitor once the enquiry is away.
+ *
+ * The honeypot branch returns this exact string too. If a trapped bot got a
+ * different message it would learn it had been caught and could retry with
+ * the hidden field left blank, so the two paths must stay identical — hence
+ * one constant rather than two literals that drift apart.
+ */
+const SUCCESS_MESSAGE =
+  "Thanks — we have your enquiry. We'll contact you as soon as possible.";
+
 export async function sendEnquiry(
   _prev: EnquiryState,
   formData: FormData
@@ -54,7 +65,7 @@ export async function sendEnquiry(
   // Honeypot: hidden from people, tempting to naive bots. Report success
   // without sending, so the bot gets no signal to retry.
   if (value("company")) {
-    return { status: "ok", message: "Thanks — that's with us." };
+    return { status: "ok", message: SUCCESS_MESSAGE };
   }
 
   const fieldErrors: Record<string, string> = {};
@@ -118,10 +129,7 @@ export async function sendEnquiry(
       };
     }
 
-    return {
-      status: "ok",
-      message: "Thanks — that's with us. We reply to every enquiry inside 24 hours.",
-    };
+    return { status: "ok", message: SUCCESS_MESSAGE };
   } catch (err) {
     console.error("[contact] Formcarry request failed", err);
     return {
