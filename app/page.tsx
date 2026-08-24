@@ -6,12 +6,8 @@ import { TiltCard } from "@/components/tilt-card";
 import { Marquee } from "@/components/marquee";
 import { CardCloud } from "@/components/card-cloud";
 import { Walkthrough } from "@/components/walkthrough";
+import { getFeaturedProjects } from "@/content/projects";
 
-const FEATURED_PROJECTS = [
-  { slug: "narayanappa-residence", name: "Narayanappa Residence", location: "Ramgondahalli, Bangalore", year: "2026", kind: "Residential" },
-  { slug: "koramangala-loft", name: "Koramangala Loft", location: "Koramangala, Bangalore", year: "2025", kind: "Renovation" },
-  { slug: "hosur-warehouse", name: "Hosur Warehouse", location: "Hosur Road, Bangalore", year: "2025", kind: "Commercial" },
-];
 
 const SERVICES = [
   { n: "01", title: "Residential Construction", body: "Ground-up builds — from a single-plot villa to a multi-storey apartment. Structural, MEP, and interiors as one build." },
@@ -85,7 +81,7 @@ export default function HomePage() {
         </Reveal>
 
         <div className="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-3">
-          {FEATURED_PROJECTS.map((p, i) => (
+          {getFeaturedProjects().map((p, i) => (
             <Reveal key={p.slug} delay={i * 120} duration={800}>
               <ProjectCard project={p} index={i} />
             </Reveal>

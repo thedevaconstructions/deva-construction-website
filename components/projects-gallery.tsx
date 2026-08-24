@@ -4,22 +4,26 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/reveal";
 import { CardCloud } from "@/components/card-cloud";
+import { getProjectKinds, type Project, type ProjectKind } from "@/content/projects";
 
-type Kind = "Residential" | "Commercial";
-type Project = {
-  slug: string;
-  name: string;
-  location: string;
-  year: string;
-  kind: Kind;
-  area: string;
-};
+type Filter = "All" | ProjectKind;
 
-const FILTERS = ["All", "Commercial", "Residential"] as const;
-type Filter = (typeof FILTERS)[number];
-
-export function ProjectsGallery({ projects }: { projects: Project[] }) {
+/**
+ * Filter buttons, derived from the projects themselves.
+ *
+ * This list used to be hard-coded as ["All", "Commercial", "Residential"].
+ * A Renovation project — a category the home page already used — therefore
+ * matched no filter and could not be seen under any tab. Reading the
+ * categories from the data means a category can never go missing again, and
+ * a new one the owner adds in content/projects.ts appears here on its own.
+ */
+export function ProjectsGallery({ projects }: { projects: readonly Project[] }) {
   const [active, setActive] = useState<Filter>("All");
+
+  const filters = useMemo<readonly Filter[]>(
+    () => ["All", ...getProjectKinds()],
+    [],
+  );
 
   const visible = useMemo(
     () => (active === "All" ? projects : projects.filter((p) => p.kind === active)),
@@ -33,7 +37,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
         <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/60">
           Category
         </span>
-        {FILTERS.map((f) => {
+        {filters.map((f) => {
           const isActive = active === f;
           return (
             <button

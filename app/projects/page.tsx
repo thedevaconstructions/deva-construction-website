@@ -1,4 +1,5 @@
 import { ProjectsGallery } from "@/components/projects-gallery";
+import { getAllProjects } from "@/content/projects";
 import { Reveal } from "@/components/reveal";
 
 export const metadata = {
@@ -7,14 +8,6 @@ export const metadata = {
     "A selection of residential, commercial, and renovation work Deva Construction has delivered across Bangalore and Karnataka.",
 };
 
-const PROJECTS = [
-  { slug: "narayanappa-residence", name: "Narayanappa Residence", location: "Ramgondahalli", year: "2026", kind: "Residential" as const, area: "4,200 sq. ft." },
-  { slug: "koramangala-loft", name: "Koramangala Loft", location: "Koramangala", year: "2025", kind: "Residential" as const, area: "2,100 sq. ft." },
-  { slug: "hosur-warehouse", name: "Hosur Industrial Warehouse", location: "Hosur Road", year: "2025", kind: "Commercial" as const, area: "22,000 sq. ft." },
-  { slug: "jayanagar-villa", name: "Jayanagar Villa", location: "Jayanagar", year: "2024", kind: "Residential" as const, area: "5,800 sq. ft." },
-  { slug: "indiranagar-office", name: "Indiranagar Office Fit-out", location: "Indiranagar", year: "2024", kind: "Commercial" as const, area: "3,400 sq. ft." },
-  { slug: "electronic-city-apartments", name: "Electronic City Apartments", location: "Electronic City", year: "2023", kind: "Residential" as const, area: "34,000 sq. ft." },
-];
 
 export default function ProjectsPage() {
   return (
@@ -34,7 +27,7 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <ProjectsGallery projects={PROJECTS} />
+      <ProjectsGallery projects={getAllProjects()} />
     </>
   );
 }
