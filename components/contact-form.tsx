@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { sendEnquiry, type EnquiryState } from "@/app/contact/actions";
 
@@ -42,10 +42,50 @@ const PROJECT_TYPES: Record<string, string> = {
 
 export function ContactForm() {
   const [state, formAction] = useActionState(sendEnquiry, initialState);
+  const resultRef = useRef<HTMLElement | null>(null);
+  // Callback ref so the same handle can point at either the success <div> or
+  // the error <p> without casting between element types.
+  const setResultRef = (el: HTMLElement | null) => {
+    resultRef.current = el;
+  };
+
+  /**
+   * Bring the result into view after submitting.
+   *
+   * Without this the outcome is invisible to most people who submit. To reach
+   * the button they have scrolled to the bottom of a ~700px form; on success
+   * that form is replaced by a ~250px panel, so the page shortens by roughly
+   * 450px and the panel ends up ABOVE the viewport — they are left looking at
+   * the footer, with no sign the enquiry went anywhere. Taller mobile layouts
+   * make the gap worse. The same applies to the validation banner, which
+   * renders at the top of the form, off-screen from the button.
+   *
+   * Focus moves too, not just scroll: it puts keyboard users at the result
+   * instead of back at the top of the document, and gives screen readers a
+   * landing point beyond the role=status / role=alert announcement.
+   */
+  useEffect(() => {
+    if (state.status === "idle") return;
+    const el = resultRef.current;
+    if (!el) return;
+    // preventScroll so focus() does not fight the smooth scroll below.
+    el.focus({ preventScroll: true });
+    el.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "center",
+    });
+  }, [state.status, state.message]);
 
   if (state.status === "ok") {
     return (
-      <div role="status" className="rounded-[28px] border border-line/70 bg-paper/70 p-8 md:p-10">
+      <div
+        ref={setResultRef}
+        tabIndex={-1}
+        role="status"
+        className="rounded-[28px] border border-line/70 bg-paper/70 p-8 md:p-10 focus:outline-none"
+      >
         <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
           Enquiry sent
         </p>
@@ -73,8 +113,10 @@ export function ContactForm() {
     >
       {state.status === "error" && state.message && (
         <p
+          ref={setResultRef}
+          tabIndex={-1}
           role="alert"
-          className="rounded-2xl border border-ink/15 bg-ink/[0.04] px-4 py-3 text-sm text-ink"
+          className="rounded-2xl border border-ink/15 bg-ink/[0.04] px-4 py-3 text-sm text-ink focus:outline-none"
         >
           {state.message}
         </p>
