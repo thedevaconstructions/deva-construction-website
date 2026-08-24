@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { Reveal } from "@/components/reveal";
-import { CardCloud } from "@/components/card-cloud";
+import { ProjectMedia } from "@/components/project-media";
 import {
   getAdjacentProjects,
   getAllProjects,
   getProjectBySlug,
+  photoAlt,
+  photoUrl,
 } from "@/content/projects";
 
 /**
@@ -74,18 +77,18 @@ export default async function ProjectPage(props: {
         </Reveal>
       </section>
 
-      {/* Hero visual. CardCloud stands in until real photography exists, and
-          matches what the cards on the gallery show, so arriving here from a
-          card is continuous rather than a jump-cut. */}
+      {/* Hero: the project's first photograph, or the animated sky when it has
+          none yet — the same visual its card shows, so arriving from a card is
+          continuous rather than a jump-cut. */}
       <section className="mx-auto max-w-7xl px-6 lg:px-10">
         <Reveal delay={120} duration={900}>
           <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] bg-bone md:aspect-[16/7]">
-            <CardCloud index={0} />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-serif text-7xl italic text-ink/25 md:text-8xl">
-                {initialsOf(project.name)}
-              </span>
-            </div>
+            <ProjectMedia
+              project={project}
+              index={0}
+              priority
+              sizes="(min-width: 1280px) 1216px, 100vw"
+            />
           </div>
         </Reveal>
       </section>
@@ -132,6 +135,28 @@ export default async function ProjectPage(props: {
         </section>
       )}
 
+      {/* Remaining photographs. The first is already the hero above, so this
+          starts at index 1 and the section disappears when there is only one. */}
+      {project.photos && project.photos.length > 1 && (
+        <section className="mx-auto max-w-7xl px-6 pt-14 lg:px-10">
+          <div className="grid gap-6 md:grid-cols-2">
+            {project.photos.slice(1).map((file, i) => (
+              <Reveal key={file} delay={i * 80} duration={800}>
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[24px] bg-bone">
+                  <Image
+                    src={photoUrl(file)}
+                    alt={photoAlt(project, i + 1)}
+                    fill
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Never a dead end: somewhere to go next, and a way to start a project. */}
       <section className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
         <Reveal duration={700}>
@@ -157,15 +182,6 @@ export default async function ProjectPage(props: {
       </section>
     </>
   );
-}
-
-/** First letters of the first two words — the same stand-in the cards use. */
-function initialsOf(name: string) {
-  return name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2);
 }
 
 function Fact({ label, value }: { label: string; value: string }) {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/reveal";
-import { CardCloud } from "@/components/card-cloud";
+import { ProjectMedia } from "@/components/project-media";
 import { getProjectKinds, type Project, type ProjectKind } from "@/content/projects";
 
 type Filter = "All" | ProjectKind;
@@ -63,20 +63,16 @@ export function ProjectsGallery({ projects }: { projects: readonly Project[] }) 
       {/* Grid */}
       <div key={active} className="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
         {visible.map((p, i) => {
-          const initials = p.name
-            .split(" ")
-            .map((w) => w[0])
-            .join("")
-            .slice(0, 2);
           return (
             <Reveal key={p.slug} delay={i * 80} duration={700}>
               <Link href={`/projects/${p.slug}`} className="group block">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] bg-bone">
                   <div className="absolute inset-0 transition duration-700 group-hover:scale-[1.04]">
-                    <CardCloud index={i} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="font-serif text-7xl italic text-ink/25">{initials}</span>
-                    </div>
+                    <ProjectMedia
+                      project={p}
+                      index={i}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    />
                   </div>
                   <div className="absolute bottom-3 left-3 rounded-full bg-paper/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink">
                     {p.kind}

@@ -44,6 +44,28 @@
               HOME page. The home page shows the first three featured
               projects, in the order they appear in this list.
 
+   photos     Optional. Photographs of the project.
+
+              1. Put the image files in the folder:  public/projects/
+              2. List their file names here, in quotes, separated by commas:
+
+                    photos: ["jayanagar-villa-1.jpg", "jayanagar-villa-2.jpg"],
+
+              File NAMES only — no folders, no "public/", no web address.
+              The FIRST photo is the one shown on the cards and at the top of
+              the project's page. The rest appear further down that page.
+              Leave `photos` out entirely and the animated sky placeholder is
+              used instead, exactly as now.
+
+              Accepted: .jpg  .jpeg  .png  .webp  .avif
+              File names: lowercase, hyphens, no spaces. "front-elevation.jpg",
+              not "Front Elevation.JPG" — capitals and spaces break on some
+              servers even when they work on Windows.
+
+              Photos are resized automatically for phones and laptops, so
+              straight-off-the-camera files are fine. Very large ones just
+              make the repository heavier — under about 5 MB each is sensible.
+
    summary    Optional. A paragraph shown on the project's own page. Leave
               it out and the page simply omits it.
    highlights Optional. A short list of points shown on the project's own
@@ -74,6 +96,8 @@ export type Project = {
   kind: ProjectKind;
   area: string;
   featured?: boolean;
+  /** File names inside public/projects/. First one is the cover image. */
+  photos?: string[];
   summary?: string;
   highlights?: string[];
 };
@@ -167,6 +191,24 @@ function assertProjectsAreValid(projects: readonly Project[]) {
           `Use lowercase letters, numbers and single hyphens only — for example "jayanagar-villa".`
       );
     }
+
+    for (const photo of p.photos ?? []) {
+      // A path rather than a bare file name is the mistake people actually
+      // make here, and it fails as a silently-missing image rather than as
+      // anything obvious, so name it explicitly.
+      if (photo.includes("/") || photo.includes("\\")) {
+        throw new Error(
+          `content/projects.ts: photo "${photo}" on project "${p.slug}" should be a file NAME only. ` +
+            `Write "front-elevation.jpg", not a folder path — the public/projects/ part is added for you.`
+        );
+      }
+      if (!/\.(jpe?g|png|webp|avif)$/i.test(photo)) {
+        throw new Error(
+          `content/projects.ts: photo "${photo}" on project "${p.slug}" is not an image file. ` +
+            `Use a .jpg, .png, .webp or .avif file.`
+        );
+      }
+    }
   }
 }
 
@@ -223,4 +265,31 @@ export function getAdjacentProjects(slug: string): {
     previous: PROJECTS[(i - 1 + PROJECTS.length) % PROJECTS.length],
     next: PROJECTS[(i + 1) % PROJECTS.length],
   };
+}
+
+/** Web path for a photo file name listed in a project's `photos`. */
+export function photoUrl(fileName: string): string {
+  return `/projects/${fileName}`;
+}
+
+/**
+ * The image shown on a project's card and at the top of its page, or null
+ * when the project has no photographs yet (the animated sky is used instead).
+ */
+export function coverPhoto(project: Project): string | null {
+  const first = project.photos?.[0];
+  return first ? photoUrl(first) : null;
+}
+
+/**
+ * Alt text for a project photograph.
+ *
+ * Generated rather than authored: these images carry information a sighted
+ * visitor gets from the surrounding page, so repeating the project's identity
+ * is more useful than an empty alt, and asking the owner to write alt text for
+ * every upload would simply mean it never gets written.
+ */
+export function photoAlt(project: Project, index = 0): string {
+  const base = `${project.name}, a ${project.kind.toLowerCase()} project in ${project.location}`;
+  return index === 0 ? base : `${base} — photograph ${index + 1}`;
 }
