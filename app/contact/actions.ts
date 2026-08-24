@@ -75,9 +75,10 @@ export async function sendEnquiry(
   // and over-strict patterns reject valid addresses.
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     fieldErrors.email = "That doesn't look like an email address.";
+  // Required, but no minimum length. A ten-character floor used to reject
+  // "New house" and "Need a quote" — real enquiries that we would rather
+  // receive and reply to than turn away at the form.
   if (!message) fieldErrors.message = "Tell us a little about the project.";
-  else if (message.length < 10)
-    fieldErrors.message = "A sentence or two would help us give a useful first read.";
 
   if (Object.keys(fieldErrors).length) {
     return { status: "error", message: "Please check the fields below.", fieldErrors };
