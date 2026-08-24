@@ -10,6 +10,7 @@
     "frames": "node scripts/build-frames.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.4",
     "motion": "^13.1.0",
     "next": "^15.5.4",
     "react": "^19.0.0",

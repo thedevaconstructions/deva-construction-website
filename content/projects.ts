@@ -196,6 +196,7 @@ function assertProjectsAreValid(projects: readonly Project[]) {
       // A path rather than a bare file name is the mistake people actually
       // make here, and it fails as a silently-missing image rather than as
       // anything obvious, so name it explicitly.
+      if (/^https?:\/\//i.test(photo)) continue; // managed in the admin app
       if (photo.includes("/") || photo.includes("\\")) {
         throw new Error(
           `content/projects.ts: photo "${photo}" on project "${p.slug}" should be a file NAME only. ` +
@@ -236,20 +237,6 @@ export function getProjectBySlug(slug: string): Project | undefined {
 }
 
 /**
- * The categories actually present in the data, for the filter buttons.
- *
- * Derived rather than hard-coded: the filter row used to list a fixed
- * ["Commercial", "Residential"], so a Renovation project matched no filter
- * and was invisible under every tab. Reading the categories from the projects
- * themselves means a category can never go missing from the filters again.
- */
-export function getProjectKinds(): readonly ProjectKind[] {
-  const order: ProjectKind[] = ["Residential", "Commercial", "Renovation"];
-  const present = new Set(PROJECTS.map((p) => p.kind));
-  return order.filter((k) => present.has(k));
-}
-
-/**
  * The projects either side of this one, for the prev/next links.
  *
  * Wraps around, so the last project's "next" is the first. A detail page is
@@ -267,9 +254,18 @@ export function getAdjacentProjects(slug: string): {
   };
 }
 
-/** Web path for a photo file name listed in a project's `photos`. */
-export function photoUrl(fileName: string): string {
-  return `/projects/${fileName}`;
+/**
+ * Web path for an entry in a project's `photos`.
+ *
+ * Two kinds of value arrive here. Photos managed in the admin app come back
+ * from Supabase as absolute URLs and pass through untouched; photos committed
+ * to this repo are bare file names and are resolved against public/projects/.
+ * Handling both in one place means every caller can stay unaware of which
+ * source a given project came from.
+ */
+export function photoUrl(fileNameOrUrl: string): string {
+  if (/^https?:\/\//i.test(fileNameOrUrl)) return fileNameOrUrl;
+  return `/projects/${fileNameOrUrl}`;
 }
 
 /**

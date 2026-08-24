@@ -1,5 +1,5 @@
 import { ProjectsGallery } from "@/components/projects-gallery";
-import { getAllProjects } from "@/content/projects";
+import { fetchProjects } from "@/lib/showcase";
 import { Reveal } from "@/components/reveal";
 
 export const metadata = {
@@ -9,7 +9,14 @@ export const metadata = {
 };
 
 
-export default function ProjectsPage() {
+/**
+ * Re-check Supabase at most once a minute. Must be a literal: Next.js reads
+ * this statically at build time and cannot resolve an imported constant.
+ */
+export const revalidate = 60;
+
+export default async function ProjectsPage() {
+  const projects = await fetchProjects();
   return (
     <>
       <section>
@@ -27,7 +34,7 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <ProjectsGallery projects={getAllProjects()} />
+      <ProjectsGallery projects={projects} />
     </>
   );
 }

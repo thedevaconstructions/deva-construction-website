@@ -3,13 +3,8 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Reveal } from "@/components/reveal";
 import { ProjectMedia } from "@/components/project-media";
-import {
-  getAdjacentProjects,
-  getAllProjects,
-  getProjectBySlug,
-  photoAlt,
-  photoUrl,
-} from "@/content/projects";
+import { photoAlt, photoUrl } from "@/content/projects";
+import { adjacentIn, fetchProjectBySlug, fetchProjects } from "@/lib/showcase";
 
 /**
  * A single project's page.
@@ -24,15 +19,26 @@ import {
  * new page to appear at the next build.
  */
 
-export function generateStaticParams() {
-  return getAllProjects().map((p) => ({ slug: p.slug }));
+/**
+ * Re-check Supabase at most once a minute. Must be a literal: Next.js reads
+ * this statically at build time and cannot resolve an imported constant.
+ */
+export const revalidate = 60;
+
+/**
+ * Prerender the projects that exist at build time. A project published in the
+ * admin app afterwards is rendered on first visit and then cached, so a new
+ * project does not need a deploy to appear.
+ */
+export async function generateStaticParams() {
+  return (await fetchProjects()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await props.params;
-  const project = getProjectBySlug(slug);
+  const project = await fetchProjectBySlug(slug);
   if (!project) return { title: "Project not found" };
 
   return {
@@ -47,10 +53,11 @@ export default async function ProjectPage(props: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await props.params;
-  const project = getProjectBySlug(slug);
+  const projects = await fetchProjects();
+  const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
-  const { previous, next } = getAdjacentProjects(slug);
+  const { previous, next } = adjacentIn(projects, slug);
 
   return (
     <>

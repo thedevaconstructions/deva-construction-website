@@ -6,7 +6,8 @@ import { TiltCard } from "@/components/tilt-card";
 import { Marquee } from "@/components/marquee";
 import { ProjectMedia } from "@/components/project-media";
 import { Walkthrough } from "@/components/walkthrough";
-import { getFeaturedProjects, type Project } from "@/content/projects";
+import { type Project } from "@/content/projects";
+import { fetchFeaturedProjects } from "@/lib/showcase";
 
 
 const SERVICES = [
@@ -26,7 +27,14 @@ const MARQUEE_ITEMS = [
   "Bangalore · Karnataka",
 ];
 
-export default function HomePage() {
+/**
+ * Re-check Supabase at most once a minute. Must be a literal: Next.js reads
+ * this statically at build time and cannot resolve an imported constant.
+ */
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const featured = await fetchFeaturedProjects();
   return (
     <>
       {/* HERO — one-take walkthrough of a finished build, scrubbed by scroll */}
@@ -81,7 +89,7 @@ export default function HomePage() {
         </Reveal>
 
         <div className="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-3">
-          {getFeaturedProjects().map((p, i) => (
+          {featured.map((p, i) => (
             <Reveal key={p.slug} delay={i * 120} duration={800}>
               <ProjectCard project={p} index={i} />
             </Reveal>

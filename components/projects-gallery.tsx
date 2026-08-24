@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/reveal";
 import { ProjectMedia } from "@/components/project-media";
-import { getProjectKinds, type Project, type ProjectKind } from "@/content/projects";
+import { type Project, type ProjectKind } from "@/content/projects";
 
 type Filter = "All" | ProjectKind;
 
@@ -20,10 +20,14 @@ type Filter = "All" | ProjectKind;
 export function ProjectsGallery({ projects }: { projects: readonly Project[] }) {
   const [active, setActive] = useState<Filter>("All");
 
-  const filters = useMemo<readonly Filter[]>(
-    () => ["All", ...getProjectKinds()],
-    [],
-  );
+  // Derived from the projects actually being shown, not from a fixed list.
+  // These arrive from the admin app at request time, so a category must never
+  // be read from anywhere that could be out of date with them.
+  const filters = useMemo<readonly Filter[]>(() => {
+    const order: ProjectKind[] = ["Residential", "Commercial", "Renovation"];
+    const present = new Set(projects.map((p) => p.kind));
+    return ["All", ...order.filter((k) => present.has(k))];
+  }, [projects]);
 
   const visible = useMemo(
     () => (active === "All" ? projects : projects.filter((p) => p.kind === active)),
