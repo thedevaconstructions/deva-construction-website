@@ -77,7 +77,7 @@ export default function ContactPage() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/60">
+    <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/75">
       {children}
     </span>
   );

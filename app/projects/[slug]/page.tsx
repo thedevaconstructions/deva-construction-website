@@ -65,7 +65,7 @@ export default async function ProjectPage(props: {
         <Reveal duration={500} y={12}>
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/60 transition hover:text-accent-deep"
+            className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/75 transition hover:text-accent-deep"
           >
             <span aria-hidden>←</span> All projects
           </Link>
@@ -78,7 +78,7 @@ export default async function ProjectPage(props: {
         </Reveal>
 
         <Reveal delay={200} duration={700}>
-          <p className="mt-6 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/60">
+          <p className="mt-6 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/75">
             {project.kind} · {project.year}
           </p>
         </Reveal>
@@ -194,7 +194,7 @@ export default async function ProjectPage(props: {
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-line/70 bg-paper/60 px-5 py-4">
-      <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">
+      <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/75">
         {label}
       </dt>
       <dd className="mt-2 font-serif text-lg leading-snug text-ink">{value}</dd>
@@ -211,7 +211,7 @@ function Sibling({
 }) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
-      <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">
+      <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/75">
         {direction}
       </span>
       <span className="mt-2 block font-serif text-xl text-ink transition group-hover:text-accent-deep">

@@ -44,12 +44,43 @@ export const metadata: Metadata = {
     siteName: "Deva Construction",
     locale: "en_IN",
     type: "website",
+    // Without this, every share of the site — and in this trade that means
+    // WhatsApp — renders as a bare text box. Cropped from a walkthrough frame
+    // rather than a logo card, so the preview shows the work.
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Interior of a Deva Construction build, exposed structural ceiling above a level threshold",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Deva Construction — Design and Built to Elegance",
+    description:
+      "Bangalore-based residential and commercial construction. Design-led builds, transparent budgets, on-site management from foundation to handover.",
+    images: ["/og.jpg"],
+  },
+  alternates: {
+    canonical: "/",
   },
   icons: {
     icon: "/icon.png",
     apple: "/apple-touch-icon.png",
   },
 };
+
+/**
+ * Regenerate every page at least once a day.
+ *
+ * The footer renders `new Date().getFullYear()` in a server component, so on
+ * a fully static page the year is frozen at build time — /about, /services
+ * and /contact would have kept saying 2026 into January. Pages that set a
+ * shorter window (the showcase pages use 60s) override this.
+ */
+export const revalidate = 86400;
 
 export const viewport: Viewport = {
   themeColor: "#F1EAE1",

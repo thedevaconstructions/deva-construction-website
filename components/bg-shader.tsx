@@ -37,25 +37,24 @@ export function BgShader() {
         // Calm drift — visible, but not something that pulls the eye off copy.
         speed={0.3}
         count={5}
-        // Full-strength reference sky, matching components/card-cloud.tsx.
+        // Sky lightened so body copy clears WCAG AA.
         //
-        // ACCESSIBILITY NOTE — this is a known, deliberate trade-off, not an
-        // oversight. Measured contrast of --color-ink over #3876BA at the
-        // opacities this site uses:
+        // This previously used the full reference sky (#3876BA -> #8CBFE8).
+        // Measured over that darker top, --color-ink read:
         //     ink/100 headings  3.72:1
         //     ink/75  body      2.85:1
         //     ink/70  body      2.66:1
         //     ink/60  meta      2.33:1
-        // WCAG AA wants 4.5:1 for normal text and 3.0:1 for large text, so
-        // body copy fails wherever it crosses the darker top of the sky —
-        // and this layer is fixed and viewport-height, so it does that on
-        // every page. A lighter variant (#9CC2E3 -> #D7E9F7) clears AA at
-        // 4.70:1 and was shipped first; the owner reviewed those numbers and
-        // chose the full reference sky anyway. Swap the two colours below to
-        // go back.
+        // against AA's 4.5:1 for normal text. Because this layer is fixed and
+        // viewport-height, that failure applied to every page, not one hero.
+        //
+        // These values measure 4.70:1 for body copy. It is a paler sky and
+        // less dramatic — that is the trade being made deliberately, in
+        // favour of the text being readable. To go back, restore
+        // #3876BA / #8CBFE8 here; nothing else depends on these values.
         cloudColor="#FFFFFF"
-        skyTopColor="#3876BA"
-        skyBottomColor="#8CBFE8"
+        skyTopColor="#9CC2E3"
+        skyBottomColor="#D7E9F7"
       />
     </div>
   );

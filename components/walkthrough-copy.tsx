@@ -177,7 +177,7 @@ export const BEATS: BeatDef[] = [
             See our recent work
           </Link>
         </div>
-        <p className="mt-6 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">
+        <p className="mt-6 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/75">
           Enquiries handled directly by the owner.
         </p>
       </div>

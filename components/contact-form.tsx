@@ -179,7 +179,7 @@ export function ContactForm() {
 
       <SubmitButton />
 
-      <p className="text-xs text-ink/60">
+      <p className="text-xs text-ink/75">
         We reply inside 24 hours. Your details are used to answer this enquiry and nothing else.
       </p>
     </form>
@@ -202,7 +202,7 @@ function SubmitButton() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/60">
+    <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/75">
       {children}
     </span>
   );

@@ -70,6 +70,10 @@ export function CardCloud({
           timeOffset={offset}
           // Same native sky as the page background, so cards read as windows
           // onto it rather than as a different material.
+          // Deliberately the full-strength sky, unlike the page background in
+          // components/bg-shader.tsx which was lightened so body copy clears
+          // WCAG AA. No body text sits on a card — only a badge on its own
+          // opaque pill — so the vivid sky can stay where it costs nothing.
           cloudColor="#FFFFFF"
           skyTopColor="#3876BA"
           skyBottomColor="#8CBFE8"

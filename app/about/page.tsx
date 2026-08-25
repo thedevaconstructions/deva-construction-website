@@ -91,7 +91,7 @@ function AboutStat({ n, l }: { n: React.ReactNode; l: string }) {
   return (
     <div>
       <div className="font-serif text-4xl text-ink md:text-5xl">{n}</div>
-      <div className="mt-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">
+      <div className="mt-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/75">
         {l}
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { animate, useInView, useMotionValue } from "motion/react";
+import { animate, useInView, useMotionValue, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -28,8 +28,12 @@ function fmt(n: number, compact?: boolean) {
 /**
  * Counts from 0 -> `to` when scrolled into view. Runs once. Uses motion's
  * useInView + useMotionValue -- no manual IntersectionObserver, no manual
- * requestAnimationFrame loop. Reduced-motion users see the final value
- * immediately (skip the count animation).
+ * requestAnimationFrame loop.
+ *
+ * Reduced-motion visitors see the final figure immediately. That is the
+ * important case to get right: a number racing upward is exactly the kind of
+ * movement the setting exists to stop, and the figure itself is the content —
+ * nothing is lost by showing it at rest.
  */
 export function CountUp({
   to,
@@ -40,14 +44,14 @@ export function CountUp({
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
+  const reduce = useReducedMotion();
   const value = useMotionValue(0);
   const [display, setDisplay] = useState(() => `${fmt(to, compact)}${suffix}`);
 
   useEffect(() => {
     if (!inView) return;
-    // MotionProvider forces animations on regardless of OS setting, so we
-    // don't shortcut on prefers-reduced-motion here either -- the count
-    // animation is part of the intended experience.
+    // Already showing the final value from the initial state — leave it.
+    if (reduce) return;
     value.set(0);
     setDisplay(`${fmt(0, compact)}${suffix}`);
     const controls = animate(value, to, {
@@ -57,7 +61,7 @@ export function CountUp({
       onComplete: () => setDisplay(`${fmt(to, compact)}${suffix}`),
     });
     return () => controls.stop();
-  }, [inView, to, suffix, compact, duration, value]);
+  }, [inView, reduce, to, suffix, compact, duration, value]);
 
   return (
     <span ref={ref} className={className}>

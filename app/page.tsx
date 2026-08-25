@@ -75,7 +75,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/projects"
-              className="group hidden text-[12px] font-semibold uppercase tracking-[0.18em] text-ink/75 transition hover:text-ink md:inline-flex md:items-center md:gap-2"
+              className="group hidden min-h-[24px] text-[12px] font-semibold uppercase tracking-[0.18em] text-ink/75 transition hover:text-ink md:inline-flex md:items-center md:gap-2"
             >
               View all
               <span
@@ -216,7 +216,7 @@ function Stat({ n, label }: { n: React.ReactNode; label: string }) {
   return (
     <div>
       <div className="font-serif text-4xl text-ink md:text-5xl">{n}</div>
-      <div className="mt-2 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/60">
+      <div className="mt-2 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-ink/75">
         {label}
       </div>
     </div>
@@ -249,7 +249,7 @@ function ProjectCard({
           <h3 className="font-serif text-xl leading-snug text-ink transition group-hover:text-accent-deep">
             {project.name}
           </h3>
-          <span className="font-mono text-xs text-ink/60">{project.year}</span>
+          <span className="font-mono text-xs text-ink/75">{project.year}</span>
         </div>
         <p className="mt-1 text-sm text-ink/70">{project.location}</p>
       </Link>

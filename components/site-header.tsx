@@ -98,9 +98,13 @@ export function SiteHeader() {
                     : pathname.startsWith(item.href);
                 return (
                   <li key={item.href}>
+                    {/* inline-flex + min-h-[24px]: the label alone was 16px
+                        tall, under the 24x24 CSS px WCAG 2.5.8 asks for. The
+                        underline is positioned from the link box, so it moves
+                        with the taller box rather than needing its own offset. */}
                     <Link
                       href={item.href}
-                      className={`relative text-[13px] font-semibold uppercase tracking-[0.18em] transition ${
+                      className={`relative inline-flex min-h-[24px] items-center text-[13px] font-semibold uppercase tracking-[0.18em] transition ${
                         active ? "text-ink" : "text-ink/75 hover:text-ink"
                       }`}
                     >

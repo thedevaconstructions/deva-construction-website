@@ -7,8 +7,7 @@
  * Source: Aceternity UI (ui.aceternity.com), registry `cloud-shader`.
  * Their licence permits use inside end products built for yourself or a
  * client; it only forbids redistributing the component itself as stock,
- * on a marketplace, or as a resale template. Same provenance as
- * components/bg-aurora.tsx.
+ * on a marketplace, or as a resale template.
  *
  * Adapted for this repo:
  *  - dropped the `cn` / @/lib/utils dependency (no shadcn setup here)

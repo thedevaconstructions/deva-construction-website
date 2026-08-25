@@ -38,7 +38,7 @@ export function ProjectsGallery({ projects }: { projects: readonly Project[] }) 
     <section className="mx-auto max-w-7xl px-6 pb-24 lg:px-10">
       {/* Category filter row */}
       <div className="flex flex-wrap items-center gap-3 border-b border-line/70 pb-6">
-        <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/60">
+        <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/75">
           Category
         </span>
         {filters.map((f) => {
@@ -59,7 +59,7 @@ export function ProjectsGallery({ projects }: { projects: readonly Project[] }) 
             </button>
           );
         })}
-        <span className="ml-auto text-xs text-ink/60">
+        <span className="ml-auto text-xs text-ink/75">
           Showing {visible.length} of {projects.length}
         </span>
       </div>
@@ -86,7 +86,7 @@ export function ProjectsGallery({ projects }: { projects: readonly Project[] }) 
                   <h2 className="font-serif text-xl text-ink transition group-hover:text-accent-deep">
                     {p.name}
                   </h2>
-                  <span className="text-xs text-ink/60">{p.year}</span>
+                  <span className="text-xs text-ink/75">{p.year}</span>
                 </div>
                 <p className="mt-1 text-sm text-ink/70">
                   {p.location} · {p.area}

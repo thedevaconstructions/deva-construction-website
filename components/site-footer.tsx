@@ -38,10 +38,19 @@ export function SiteFooter() {
             walk-through.
           </p>
           <div className="mt-8 space-y-2 text-sm text-paper/85">
-            <a href="mailto:hello@devaconstructions.in" className="block hover:text-paper hover:underline">
+            {/* min-h-[24px] + inline-flex items-center: WCAG 2.5.8 asks for a
+                24x24 CSS px target. These were 20px tall, which on a phone is
+                a fiddly tap between two adjacent links. */}
+            <a
+              href="mailto:hello@devaconstructions.in"
+              className="inline-flex min-h-[24px] items-center hover:text-paper hover:underline"
+            >
               hello@devaconstructions.in
             </a>
-            <a href="tel:+919999999999" className="block hover:text-paper hover:underline">
+            <a
+              href="tel:+919999999999"
+              className="inline-flex min-h-[24px] items-center hover:text-paper hover:underline"
+            >
               +91 99999 99999
             </a>
             <div className="text-paper/60">Bangalore, Karnataka</div>
@@ -53,12 +62,12 @@ export function SiteFooter() {
             <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
               {col.title}
             </div>
-            <ul className="mt-4 space-y-3 text-sm">
+            <ul className="mt-2 text-sm">
               {col.links.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-paper/80 transition hover:text-paper"
+                    className="inline-flex min-h-[24px] items-center py-1 text-paper/80 transition hover:text-paper"
                   >
                     {link.label}
                   </Link>
