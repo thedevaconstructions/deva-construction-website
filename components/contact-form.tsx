@@ -101,9 +101,8 @@ export function ContactForm() {
         </p>
         <p className="mt-4 text-sm text-ink/70">
           If it&apos;s urgent, WhatsApp is usually fastest —{" "}
-          {/* TODO(real-details): placeholder number. */}
-          <a href="tel:+919999999999" className="underline underline-offset-4 hover:text-accent-deep">
-            +91 99999 99999
+          <a href="tel:+919980144405" className="underline underline-offset-4 hover:text-accent-deep">
+            +91 99801 44405
           </a>
           .
         </p>

@@ -39,23 +39,21 @@ export default function ContactPage() {
               href="mailto:hello@devaconstructions.in"
               value="hello@devaconstructions.in"
             />
-            {/* TODO(real-details): placeholder number — replace with the real
-                phone/WhatsApp before this gets any traffic. Also appears in
-                components/contact-form.tsx, site-header.tsx and site-footer.tsx. */}
             <Detail
               label="Phone / WhatsApp"
-              href="tel:+919999999999"
-              value="+91 99999 99999"
+              href="tel:+919980144405"
+              value="+91 99801 44405"
             />
             <div>
               <Label>Studio</Label>
-              {/* TODO(real-details): placeholder address / postcode. */}
               <address className="mt-2 not-italic text-ink/80">
                 Deva Construction
                 <br />
-                Bangalore, Karnataka 560000
+                114, BK Layout, Thindlu
                 <br />
-                India
+                Vidyaranyapura, Bengaluru
+                <br />
+                Karnataka 560097, India
               </address>
             </div>
             <div>

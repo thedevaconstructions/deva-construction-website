@@ -198,10 +198,10 @@ export default async function HomePage() {
                   </Link>
                 </Magnetic>
                 <a
-                  href="tel:+919999999999"
+                  href="tel:+919980144405"
                   className="inline-flex items-center rounded-full border border-ink/30 px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:bg-ink/10"
                 >
-                  +91 99999 99999
+                  +91 99801 44405
                 </a>
               </div>
             </div>

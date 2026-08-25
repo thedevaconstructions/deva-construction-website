@@ -48,12 +48,12 @@ export function SiteFooter() {
               hello@devaconstructions.in
             </a>
             <a
-              href="tel:+919999999999"
+              href="tel:+919980144405"
               className="inline-flex min-h-[24px] items-center hover:text-paper hover:underline"
             >
-              +91 99999 99999
+              +91 99801 44405
             </a>
-            <div className="text-paper/60">Bangalore, Karnataka</div>
+            <div className="text-paper/70">Vidyaranyapura, Bengaluru</div>
           </div>
         </div>
 
