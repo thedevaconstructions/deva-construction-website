@@ -3,33 +3,33 @@ import { Reveal } from "@/components/reveal";
 export const metadata = {
   title: "Expertise",
   description:
-    "Residential construction, commercial fit-outs, renovation, and end-to-end project management across Karnataka.",
+    "Residential construction, commercial and industrial builds, renovation and interiors, and end-to-end site management across Bangalore and Karnataka.",
 };
 
 const SERVICES = [
   {
     n: "01",
     title: "Residential Construction",
-    body: "Independent homes and small apartments, structural to interior. Design in-house or with a partner architect; we take the drawing set to a signed handover.",
-    scope: ["Structural design", "MEP coordination", "Finishing & interiors", "Landscape"],
+    body: "Independent houses, villas, row houses, and apartment buildings. Design-to-handover execution with full structural and finishing work.",
+    scope: ["Independent houses", "Villas & row houses", "Apartment buildings", "Structural & finishing"],
   },
   {
     n: "02",
     title: "Commercial & Industrial",
-    body: "Retail shells, office fit-outs, warehouses. Tight programme, transparent BOQ, weekly progress you can actually verify from the dashboard.",
-    scope: ["Fit-outs", "Warehouse builds", "Retail shell", "Base build"],
+    body: "Office buildings, retail spaces, warehouses, and factory structures. Built to specification with on-time delivery.",
+    scope: ["Office buildings", "Retail spaces", "Warehouses", "Factory structures"],
   },
   {
     n: "03",
     title: "Renovation & Interiors",
-    body: "Older homes and workspaces re-plotted to how you actually live now. We treat what's there as a constraint to design with, not to fight against.",
-    scope: ["Full-home renovation", "Interior joinery", "Structural retrofit", "Bathroom / kitchen"],
+    body: "Structural remodelling, interior fit-outs, and complete makeovers for existing buildings. Breathing new life into old spaces.",
+    scope: ["Structural remodelling", "Interior fit-outs", "Complete makeovers", "Bathroom / kitchen"],
   },
   {
     n: "04",
-    title: "Project Management",
-    body: "Own the drawings but not the labour? We take a signed set through procurement, contractors, quality, and cash-flow — all in one place.",
-    scope: ["Procurement", "Vendor management", "Quality on-site", "Cost control"],
+    title: "Site Management",
+    body: "End-to-end project coordination: labour, materials, suppliers, budgets, and timelines — all tracked and reported digitally.",
+    scope: ["Labour & attendance", "Materials & suppliers", "Budgets & cost control", "Timelines & reporting"],
   },
 ];
 

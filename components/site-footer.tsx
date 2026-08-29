@@ -30,12 +30,12 @@ export function SiteFooter() {
         <div className="md:col-span-2">
           <div className="font-serif text-3xl leading-none text-paper">THE DEVA</div>
           <div className="mt-2 border-t border-paper/25 pt-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-paper/80">
-            Design and built to elegance
+            Building with precision. Delivering with trust.
           </div>
           <p className="mt-8 max-w-sm text-sm leading-relaxed text-paper/70">
-            A Bangalore-based construction firm working across residential, commercial, and
-            renovation. Every build managed end-to-end, from the first drawing to the final
-            walk-through.
+            A Bangalore-based construction firm building residential, commercial, and renovation
+            projects with end-to-end site management. From planning and foundation to fit-out and
+            handover, every trade is coordinated under one roof.
           </p>
           <div className="mt-8 space-y-2 text-sm text-paper/85">
             {/* min-h-[24px] + inline-flex items-center: WCAG 2.5.8 asks for a
@@ -80,7 +80,7 @@ export function SiteFooter() {
 
       <div className="border-t border-paper/15">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-6 py-6 text-xs text-paper/50 md:flex-row md:items-center lg:px-10">
-          <div>© {year} Deva Construction. All rights reserved.</div>
+          <div>© {year} Deva Construction · Bangalore, India</div>
           <div>Built in Bangalore.</div>
         </div>
       </div>

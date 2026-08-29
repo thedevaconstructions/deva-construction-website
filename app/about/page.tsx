@@ -4,21 +4,21 @@ import { CountUp } from "@/components/count-up";
 export const metadata = {
   title: "About",
   description:
-    "Deva Construction is a Bangalore-based construction firm founded in 2018, working across residential, commercial, and renovation across Karnataka.",
+    "Deva Construction is a Bangalore-based construction firm building residential, commercial, and renovation projects with end-to-end site management and real-time client visibility.",
 };
 
 const PRINCIPLES = [
   {
-    title: "One build at a time.",
-    body: "We limit how many jobs we run in parallel on purpose. Every site gets the same team's attention every week — no farming out, no rotating faces.",
+    title: "Every site runs digitally.",
+    body: "Materials ordered, daily attendance logged, payments processed, budgets monitored — all recorded as it happens. No spreadsheets, no guesswork, no reconstructing the month from memory.",
   },
   {
-    title: "Numbers you can verify.",
-    body: "Every client gets a live dashboard. Cash-flow, purchases, wages, materials, attendance — all visible, all the time. If you can see it, we can defend it.",
+    title: "Clients see their own money.",
+    body: "Every client gets a dashboard showing exactly where their money is going and how the project is progressing. Real-time progress, material costs, payment history — without having to call and ask.",
   },
   {
-    title: "Drawings that match the pour.",
-    body: "The most expensive mistake in construction is a slab that doesn't match the drawing. We design and build in the same room to keep that gap at zero.",
+    title: "One team, one roof.",
+    body: "Structure, fit-out, and site management handled in-house. No scattered subcontractors, no finger-pointing when something goes wrong on the third floor.",
   },
 ];
 
@@ -34,16 +34,23 @@ export default function AboutPage() {
           </Reveal>
           <Reveal delay={120} duration={900}>
             <h1 className="mt-6 font-serif text-5xl leading-[1.02] tracking-tight text-ink md:text-7xl">
-              A construction firm run like a <span className="italic">design</span> studio.
+              You deserve to know what is happening on your site <span className="italic">every day.</span>
             </h1>
           </Reveal>
           <Reveal delay={280} duration={800}>
-            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-ink/75">
-              Founded in Bangalore in 2018, Deva Construction has grown into a team of 80+
-              working across residential, commercial, and renovation across Karnataka. We stay
-              narrow on purpose — a handful of active builds at any time, all managed end-to-end
-              by the same core team.
-            </p>
+            <div className="mt-8 max-w-2xl space-y-6 text-lg leading-relaxed text-ink/75">
+              <p>
+                Deva Construction is a full-service construction company based in Bangalore, India.
+                We take projects from the ground up — planning, structural work, fit-out, and final
+                handover — managing every trade, every material, and every worker under one roof.
+              </p>
+              <p>
+                We specialise in three areas: residential construction (independent houses, villas,
+                and apartment buildings), commercial and industrial projects (offices, retail
+                spaces, warehouses), and renovation and interior work (remodelling, structural
+                upgrades, and complete interior fit-outs).
+              </p>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -56,7 +63,7 @@ export default function AboutPage() {
                 How we work
               </p>
               <h2 className="mt-4 font-serif text-4xl leading-tight tracking-tight text-ink md:text-5xl">
-                Principles the whole team can defend.
+                How we run our sites.
               </h2>
             </div>
           </Reveal>

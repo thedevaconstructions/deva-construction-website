@@ -11,10 +11,54 @@ import { fetchFeaturedProjects } from "@/lib/showcase";
 
 
 const SERVICES = [
-  { n: "01", title: "Residential Construction", body: "Ground-up builds — from a single-plot villa to a multi-storey apartment. Structural, MEP, and interiors as one build." },
-  { n: "02", title: "Commercial & Industrial", body: "Office fit-outs, retail shells, warehouses. Tight programmes with drawings and site labour we run in-house." },
-  { n: "03", title: "Renovation & Interiors", body: "Homes and workspaces re-plotted around how you actually live now. Existing structure becomes a design constraint, not a fight." },
-  { n: "04", title: "Project Management", body: "You have the drawings but not the labour? We take a signed set through procurement, site quality, and cash-flow — end to end." },
+  {
+    n: "01",
+    title: "Residential Construction",
+    body: "Independent houses, villas, row houses, and apartment buildings. Design-to-handover execution with full structural and finishing work.",
+  },
+  {
+    n: "02",
+    title: "Commercial & Industrial",
+    body: "Office buildings, retail spaces, warehouses, and factory structures. Built to specification with on-time delivery.",
+  },
+  {
+    n: "03",
+    title: "Renovation & Interiors",
+    body: "Structural remodelling, interior fit-outs, and complete makeovers for existing buildings. Breathing new life into old spaces.",
+  },
+  {
+    n: "04",
+    title: "Site Management",
+    body: "End-to-end project coordination: labour, materials, suppliers, budgets, and timelines — all tracked and reported digitally.",
+  },
+];
+
+/**
+ * Reasons to choose the firm, in the visitor's order of doubt: can I see what
+ * is happening, will it finish on time, who is actually responsible, is any of
+ * it recorded, and do they know Bangalore.
+ */
+const WHY_US = [
+  {
+    title: "Full transparency",
+    body: "Clients get a personal dashboard showing real-time project progress, material costs, and payment history.",
+  },
+  {
+    title: "On-schedule delivery",
+    body: "Every project is planned with milestones, daily attendance tracking, and budget alerts to keep things on track.",
+  },
+  {
+    title: "One team, one roof",
+    body: "Structure, fit-out, and management handled in-house. No scattered subcontractors, no finger-pointing.",
+  },
+  {
+    title: "Digital-first operations",
+    body: "Every material order, every wage payment, every site photo logged digitally. Complete accountability from day one.",
+  },
+  {
+    title: "Bangalore expertise",
+    body: "Built in Bangalore, for Bangalore. We understand local materials, labour, regulations, and the way construction actually works here.",
+  },
 ];
 
 const MARQUEE_ITEMS = [
@@ -135,20 +179,32 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* CLIENT NOTE */}
-      <section className="mx-auto max-w-4xl px-6 py-32 text-center lg:px-10">
-        <Reveal duration={900}>
+      {/* WHY US
+          Replaces a testimonial block whose quote and attribution were both
+          invented — it read as a real client endorsement under the name
+          "Placeholder Name". A fabricated review on a business site is worse
+          than no review, and these are claims the firm can actually stand
+          behind. Put a real quote back here when there is one to use. */}
+      <section className="mx-auto max-w-7xl px-6 py-32 lg:px-10">
+        <Reveal duration={800}>
           <p className="eyebrow-dot text-[11px] font-semibold uppercase tracking-[0.24em] text-accent-deep">
-            Client note
+            Why choose us
           </p>
-          <blockquote className="mt-8 font-serif text-3xl leading-tight tracking-tight text-ink md:text-[42px]">
-            &ldquo;They ran our three-storey build like a design studio and a workshop at the same
-            time. On budget, on schedule, and the drawings actually matched what got poured.&rdquo;
-          </blockquote>
-          <div className="mt-8 text-sm text-ink/70">
-            <span className="font-semibold text-ink">Placeholder Name</span> · Client, Residential build
-          </div>
+          <h2 className="mt-3 max-w-2xl font-serif text-4xl leading-tight tracking-tight text-ink md:text-5xl">
+            Construction doesn&apos;t have to be <span className="italic">opaque.</span>
+          </h2>
         </Reveal>
+
+        <dl className="mt-16 grid gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+          {WHY_US.map((item, i) => (
+            <Reveal key={item.title} delay={i * 80} duration={700}>
+              <div className="border-t border-line/70 pt-6">
+                <dt className="font-serif text-2xl leading-snug text-ink">{item.title}</dt>
+                <dd className="mt-3 text-sm leading-relaxed text-ink/75">{item.body}</dd>
+              </div>
+            </Reveal>
+          ))}
+        </dl>
       </section>
 
       {/* CTA */}
@@ -174,9 +230,11 @@ export default async function HomePage() {
                 Let&apos;s build
               </p>
               <h2 className="mt-4 font-serif text-4xl leading-tight tracking-tight md:text-6xl">
-                Have a plot,
-                <br />a sketch,
-                <br />or <span className="italic text-accent-deep">just an idea?</span>
+                Ready to build?
+                <br />
+                Bring your plans —
+                <br />
+                <span className="italic text-accent-deep">we&apos;ll handle the rest.</span>
               </h2>
               <p className="mt-6 max-w-lg text-ink/80">
                 We reply to every enquiry inside 24 hours with a first-read from our team and a

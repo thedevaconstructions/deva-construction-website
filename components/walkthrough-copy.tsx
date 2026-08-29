@@ -53,10 +53,10 @@ export const BEATS: BeatDef[] = [
           Deva Construction
         </h1>
         <p className="mt-4 font-serif text-2xl italic text-ink/80 md:text-3xl">
-          Design &amp; Built to elegance.
+          Building with precision. Delivering with trust.
         </p>
         <p className="mt-5 max-w-md text-sm leading-relaxed text-ink/70 md:text-base">
-          Everything before the front door is part of the build.
+          Residential, commercial, and renovation across Bangalore — foundation to handover.
         </p>
       </div>
     ),
@@ -146,8 +146,8 @@ export const BEATS: BeatDef[] = [
       <div className="relative max-w-2xl p-6 md:p-8">
         <div aria-hidden className="absolute -inset-8 -z-10" style={glow} />
         <h2 className="font-serif text-4xl leading-[1.05] tracking-tight text-ink/[.92] md:text-6xl">
-          Have a plot, a sketch, or{" "}
-          <span className="italic text-accent-deep">just an idea?</span>
+          Ready to build? Bring your plans —{" "}
+          <span className="italic text-accent-deep">we&rsquo;ll handle the rest.</span>
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-ink/70 md:text-base">
           We reply to every enquiry inside 24 hours with a first-read from the

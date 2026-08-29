@@ -30,16 +30,16 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Deva Construction — Design and Built to Elegance",
+    default: "Deva Construction — Building with Precision. Delivering with Trust.",
     template: "%s — Deva Construction",
   },
   description:
-    "Deva Construction is a Bangalore-based residential and commercial construction firm. Design-led builds, transparent budgets, on-site management from foundation to handover.",
+    "Deva Construction is a Bangalore-based construction firm building residential, commercial, and renovation projects with end-to-end site management — foundation to handover, every trade under one roof.",
   metadataBase: new URL("https://devaconstructions.in"),
   openGraph: {
-    title: "Deva Construction — Design and Built to Elegance",
+    title: "Deva Construction — Building with Precision. Delivering with Trust.",
     description:
-      "Bangalore-based residential and commercial construction. Design-led builds, transparent budgets, on-site management from foundation to handover.",
+      "Bangalore-based construction firm specialising in residential homes, commercial spaces, and renovation — from foundation to handover.",
     url: "https://devaconstructions.in",
     siteName: "Deva Construction",
     locale: "en_IN",
@@ -58,9 +58,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Deva Construction — Design and Built to Elegance",
+    title: "Deva Construction — Building with Precision. Delivering with Trust.",
     description:
-      "Bangalore-based residential and commercial construction. Design-led builds, transparent budgets, on-site management from foundation to handover.",
+      "Bangalore-based construction firm specialising in residential homes, commercial spaces, and renovation — from foundation to handover.",
     images: ["/og.jpg"],
   },
   alternates: {
