@@ -36,8 +36,8 @@ export default function ContactPage() {
           <div className="space-y-8 text-sm">
             <Detail
               label="Email"
-              href="mailto:hello@devaconstructions.in"
-              value="hello@devaconstructions.in"
+              href="mailto:thedeva.co@gmail.com"
+              value="thedeva.co@gmail.com"
             />
             <Detail
               label="Phone / WhatsApp"

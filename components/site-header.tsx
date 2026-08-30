@@ -190,8 +190,8 @@ export function SiteHeader() {
               Start a project →
             </Link>
             <div className="mt-6 space-y-1 text-sm text-paper/70">
-              <a href="mailto:hello@devaconstructions.in" className="block hover:text-paper">
-                hello@devaconstructions.in
+              <a href="mailto:thedeva.co@gmail.com" className="block hover:text-paper">
+                thedeva.co@gmail.com
               </a>
               <a href="tel:+919980144405" className="block hover:text-paper">
                 +91 99801 44405

@@ -42,10 +42,10 @@ export function SiteFooter() {
                 24x24 CSS px target. These were 20px tall, which on a phone is
                 a fiddly tap between two adjacent links. */}
             <a
-              href="mailto:hello@devaconstructions.in"
+              href="mailto:thedeva.co@gmail.com"
               className="inline-flex min-h-[24px] items-center hover:text-paper hover:underline"
             >
-              hello@devaconstructions.in
+              thedeva.co@gmail.com
             </a>
             <a
               href="tel:+919980144405"

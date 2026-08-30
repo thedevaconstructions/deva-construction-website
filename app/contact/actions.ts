@@ -37,7 +37,7 @@ const PROJECT_TYPES: Record<string, string> = {
   other: "Something else",
 };
 
-const FALLBACK_EMAIL = "hello@devaconstructions.in";
+const FALLBACK_EMAIL = "thedeva.co@gmail.com";
 
 /**
  * Shown to the visitor once the enquiry is away.
