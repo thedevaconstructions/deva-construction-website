@@ -36,8 +36,13 @@ export function ProjectsGallery({ projects }: { projects: readonly Project[] }) 
 
   return (
     <section className="mx-auto max-w-7xl px-6 pb-24 lg:px-10">
-      {/* Category filter row */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-line/70 pb-6">
+      {/* Category filter row — pointless with nothing to filter, so it is
+          hidden rather than shown reading "Showing 0 of 0". */}
+      <div
+        className={`flex-wrap items-center gap-3 border-b border-line/70 pb-6 ${
+          projects.length === 0 ? "hidden" : "flex"
+        }`}
+      >
         <span className="mr-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-ink/75">
           Category
         </span>
@@ -96,6 +101,34 @@ export function ProjectsGallery({ projects }: { projects: readonly Project[] }) 
           );
         })}
       </div>
+
+      {/* Empty state. Reachable in normal use: the owner controls this list
+          from the admin app and can unpublish or archive everything. It says
+          what is true and offers a way forward, rather than leaving a visitor
+          on a blank page wondering whether the site is broken. */}
+      {visible.length === 0 && (
+        <Reveal duration={700}>
+          <div className="mt-12 rounded-[28px] border border-line/70 bg-paper/60 px-8 py-20 text-center">
+            <p className="font-serif text-2xl leading-snug text-ink md:text-3xl">
+              {projects.length === 0
+                ? "Our project gallery is being updated."
+                : `No ${active.toLowerCase()} projects to show yet.`}
+            </p>
+            <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-ink/75">
+              {projects.length === 0
+                ? "We are putting together a selection of recent work. In the meantime, tell us about your build and we will talk you through what we have done."
+                : "Try another category, or get in touch about what you have in mind."}
+            </p>
+            <Link
+              href="/contact"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent-deep px-7 py-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-paper transition hover:opacity-90"
+            >
+              Start a project
+              <span aria-hidden>&rarr;</span>
+            </Link>
+          </div>
+        </Reveal>
+      )}
     </section>
   );
 }

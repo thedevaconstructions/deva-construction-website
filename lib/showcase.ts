@@ -17,18 +17,22 @@ import { getAllProjects, type Project } from "@/content/projects";
  *
  * FALLBACK
  * --------
- * When Supabase is not configured, or a query fails, the hard-coded list in
- * content/projects.ts is used instead. That is a deliberate safety net rather
- * than a second source of truth:
+ * The hard-coded list in content/projects.ts is used ONLY when the database
+ * cannot be reached: no credentials configured, or the query errored. That
+ * keeps `npm run dev` and `npm run build` working without the project's
+ * environment variables, and degrades a Supabase outage to the last committed
+ * list rather than an empty portfolio.
  *
- *   - it keeps `npm run dev` and `npm run build` working for anyone without
- *     the project's environment variables
- *   - a Supabase outage degrades to the last committed list rather than an
- *     empty projects page, which would look broken to a visitor
+ * It is NOT used when the query succeeds and returns nothing. An earlier
+ * version did fall back on an empty result, on the assumption that empty meant
+ * "the migration has not run yet". That assumption expired the day the system
+ * went live: on 1 Sep 2026 the owner removed the seeded demo projects, the
+ * table was legitimately empty, and the site spent hours advertising six
+ * builds that had been deliberately deleted. A portfolio must never claim work
+ * its owner has retracted. Empty means empty.
  *
  * Once Supabase is configured, IT is authoritative and the content file is
- * never consulted. The file will drift over time; that is acceptable for a
- * fallback and is why it must not be treated as current.
+ * never consulted for content the owner controls.
  */
 
 type ShowcaseRow = {
@@ -105,14 +109,9 @@ export async function fetchProjects(): Promise<readonly Project[]> {
     return getAllProjects();
   }
 
-  // An empty table almost certainly means the migration has not been run yet,
-  // rather than that the firm has genuinely retired every project. Showing the
-  // committed list beats showing a visitor an empty portfolio.
-  if (rows.length === 0) {
-    console.warn("[showcase] no published projects found — using content/projects.ts");
-    return getAllProjects();
-  }
-
+  // Deliberately NO fallback here. An empty result from a working query means
+  // the owner has published nothing, and the page must reflect that rather
+  // than resurrecting deleted demo entries. See the FALLBACK note above.
   const byProject = new Map<string, string[]>();
   for (const p of photoRows ?? []) {
     const list = byProject.get(p.showcase_id) ?? [];
